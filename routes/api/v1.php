@@ -60,4 +60,13 @@ $api->version('v1', [
     ], function ($api) {
         $api->get('country/lists', 'CountriesController@lists');
     });
+    $api->group([
+        'namespace' => 'Api\Common\V1\Controllers',
+        'prefix' => 'common'
+    ], function ($api) {
+        $api->post('register', 'RegisterController@register');
+        $api->post('login', 'AuthorizationsController@login');
+        $api->resource('shops', 'ShopsController');
+        $api->post('upload', 'FilesController@fileUpload');
+    });
 });

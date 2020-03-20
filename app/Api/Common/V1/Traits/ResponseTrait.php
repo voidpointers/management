@@ -1,8 +1,8 @@
 <?php
 
-namespace Api\Auth\V1\Traits;
+namespace Api\Common\V1\Traits;
 
-use Api\User\V1\Transformers\UserTransformer;
+use Api\Common\V1\Transformers\UserTransformer;
 use League\Fractal\Serializer\DataArraySerializer;
 use Illuminate\Support\Facades\Auth;
 

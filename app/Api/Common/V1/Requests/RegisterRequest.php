@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Auth\V1\Requests;
+namespace Api\Common\V1\Requests;
 
 use App\FormRequest;
 

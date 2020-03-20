@@ -1,12 +1,12 @@
 <?php
 
-namespace Api\Auth\V1\Controllers;
+namespace Api\Common\V1\Controllers;
 
-use Illuminate\Support\Facades\Auth;
-use Api\Auth\V1\Requests\AuthorizationRequest;
-use Api\Auth\V1\Traits\ResponseTrait;
 use App\Controller;
-use User\Entities\User;
+use App\User;
+use Illuminate\Support\Facades\Auth;
+use Api\Common\V1\Requests\AuthorizationRequest;
+use Api\Common\V1\Traits\ResponseTrait;
 
 /**
  * 用户认证

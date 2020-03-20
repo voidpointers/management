@@ -1,6 +1,6 @@
 <?php
 
-namespace Api;
+namespace App;
 
 use Dingo\Api\Routing\Helpers;
 use Laravel\Lumen\Routing\Controller as BaseController;

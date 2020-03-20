@@ -1,9 +1,9 @@
 <?php
 
-namespace Api\User\V1\Transformers;
+namespace Api\Common\V1\Transformers;
 
 use League\Fractal\TransformerAbstract;
-use User\Entities\User;
+use App\User;
 
 class UserTransformer extends TransformerAbstract
 {

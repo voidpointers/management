@@ -1,12 +1,12 @@
 <?php
 
-namespace Api\Auth\V1\Controllers;
+namespace Api\Common\V1\Controllers;
 
-use Api\Auth\V1\Requests\RegisterRequest;
-use Api\Auth\V1\Traits\ResponseTrait;
 use App\Controller;
+use App\User;
+use Api\Common\V1\Requests\RegisterRequest;
+use Api\Common\V1\Traits\ResponseTrait;
 use Illuminate\Support\Facades\Hash;
-use User\Entities\User;
 
 class RegisterController extends Controller
 {
