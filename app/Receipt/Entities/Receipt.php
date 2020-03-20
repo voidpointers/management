@@ -57,4 +57,43 @@ class Receipt extends Model
     {
         return self::STATUS[$this->attributes['status']] ?? '';
     }
+
+    public function listsByIds($ids)
+    {
+        return self::whereIn('id', $ids)->with(['consignee', 'transaction'])->get();
+    }
+
+    public function lists($where)
+    {
+        $query = self::query();
+
+        foreach ($where as $key => $value) {
+            if ('in' == $key) {
+                foreach ($value as $k => $val) {
+                    $query->whereIn($k, $val);
+                }
+            } else {
+                $query->where($value);
+            }
+        }
+
+        return $query->with(['consignee', 'transaction'])->get();
+    }
+
+    public function update($where, $data)
+    {
+        $query = self::query();
+
+        foreach ($where as $key => $value) {
+            if ('in' == $key) {
+                foreach ($value as $k => $val) {
+                    $query->whereIn($k, $val);
+                }
+            } else {
+                $query->where($value);
+            }
+        }
+
+        return $query->update($data);
+    }
 }

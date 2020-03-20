@@ -24,42 +24,4 @@ class ReceiptService
         return Consignee::updateBatch($data);
     }
 
-    public function listsByIds($ids)
-    {
-        return Receipt::whereIn('id', $ids)->with(['consignee', 'transaction'])->get();
-    }
-
-    public function lists($where)
-    {
-        $query = Receipt::query();
-
-        foreach ($where as $key => $value) {
-            if ('in' == $key) {
-                foreach ($value as $k => $val) {
-                    $query->whereIn($k, $val);
-                }
-            } else {
-                $query->where($value);
-            }
-        }
-
-        return $query->with(['consignee', 'transaction'])->get();
-    }
-
-    public function update($where, $data)
-    {
-        $query = Receipt::query();
-
-        foreach ($where as $key => $value) {
-            if ('in' == $key) {
-                foreach ($value as $k => $val) {
-                    $query->whereIn($k, $val);
-                }
-            } else {
-                $query->where($value);
-            }
-        }
-
-        return $query->update($data);
-    }
 }

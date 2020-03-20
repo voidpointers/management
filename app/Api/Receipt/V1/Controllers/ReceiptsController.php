@@ -9,11 +9,8 @@ use Api\Receipt\V1\Requests\ReceiptRequest;
 use Api\Receipt\V1\Transforms\ReceiptTransformer;
 use Dingo\Api\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use Package\Services\PackageService;
 use Receipt\Entities\Receipt;
-use Receipt\Repositories\ReceiptRepository;
-use Receipt\Repositories\TransactionRepository;
-use Receipt\Services\ReceiptService;
+use Receipt\Entities\Transaction;
 use Receipt\Services\StateMachine;
 
 /**
@@ -23,30 +20,12 @@ use Receipt\Services\StateMachine;
  */
 class ReceiptsController extends Controller
 {
-    protected $repository;
-
-    protected $transactionRepository;
-
     protected $stateMachine;
 
-    protected $packageService;
-
-    protected $receiptService;
-
     public function __construct(
-        ReceiptRepository $repository,
-        TransactionRepository $transactionRepository,
-        StateMachine $stateMachine,
-        PackageService $packageService,
-        ReceiptService $receiptService,
-        Receipt $receipt)
+        StateMachine $stateMachine)
     {
-        $this->repository = $repository;
-        $this->transactionRepository = $transactionRepository;
         $this->stateMachine = $stateMachine;
-        $this->packageService = $packageService;
-        $this->receiptService = $receiptService;
-        $this->receipt = $receipt;
     }
 
     /**
@@ -98,7 +77,7 @@ class ReceiptsController extends Controller
             return $this->response->error('缺少必要参数', 500);
         }
 
-        $this->receiptService->update(
+        Receipt::update(
             ['where' => ['receipt_sn' => $receipt_sn]], $validated
         );
 
@@ -127,8 +106,7 @@ class ReceiptsController extends Controller
      */
     public function export(Request $request)
     {
-        $data = $this->transactionRepository->apply($request)
-            ->with(['consignee', 'receipt'])
+        $data = Transaction::with(['consignee', 'receipt'])
             ->orderBy('id', 'desc')
             ->get();
         
