@@ -32,7 +32,8 @@
             "Logistics\\": "app/Logistics",
             "Express\\": "app/Express",
             "Package\\": "app/Package",
-            "System\\": "app/System"
+            "System\\": "app/System",
+            "Common\\": "app/Common"
         }
     },
     "autoload-dev": {
