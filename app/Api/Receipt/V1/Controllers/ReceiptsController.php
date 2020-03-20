@@ -77,9 +77,7 @@ class ReceiptsController extends Controller
             return $this->response->error('缺少必要参数', 500);
         }
 
-        Receipt::update(
-            ['where' => ['receipt_sn' => $receipt_sn]], $validated
-        );
+        Receipt::where(['receipt_sn' => $receipt_sn])->update($validated);
 
         return $this->response->array(['msg' => 'success']);
     }
