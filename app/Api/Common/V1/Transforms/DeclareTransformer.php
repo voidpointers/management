@@ -1,9 +1,9 @@
 <?php
 
-namespace Api\Shop\V1\Transforms;
+namespace Api\Common\V1\Transforms;
 
 use League\Fractal\TransformerAbstract;
-use Shop\Entities\Declares;
+use Common\Entities\Declares;
 
 class DeclareTransformer extends TransformerAbstract
 {

@@ -5,7 +5,7 @@ namespace Api\Common\V1\Controllers;
 use Api\Common\V1\Transforms\ShopTransformer;
 use App\Controller;
 use Dingo\Api\Http\Request;
-use Shop\Entities\Shop;
+use Common\Entities\Shop;
 
 class ShopsController extends Controller
 {
