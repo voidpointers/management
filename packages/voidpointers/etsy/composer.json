@@ -1,0 +1,21 @@
+{
+    "name": "voidpointers/etsy",
+    "description": "Etsy api",
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5"
+    },
+    "authors": [
+        {
+            "name": "bryan",
+            "email": "voidpointers@hotmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Voidpointers\\Etsy\\": "src/",
+            "Gentor\\OAuth1Etsy\\Client\\": "packages/vendor/src/"
+        }
+    }
+}
