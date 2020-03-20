@@ -24,7 +24,14 @@
             "database/factories"
         ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Api\\": "app/Api",
+            "Receipt\\": "app/Receipt",
+            "Voidpointers\\Yunexpress\\": "packages/voidpointers/yunexpress/src",
+            "Logistics\\": "app/Logistics",
+            "Express\\": "app/Express",
+            "Package\\": "app/Package",
+            "System\\": "app/System"
         }
     },
     "autoload-dev": {
