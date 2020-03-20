@@ -21,9 +21,17 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-$app->withFacades();
+$app->withFacades(true, [
+    Maatwebsite\Excel\Facades\Excel::class => 'Excel'
+]);
 
 $app->withEloquent();
+
+$app->configure('cors');
+$app->configure('database');
+$app->configure('auth');
+$app->configure('api');
+$app->configure('excel');
 
 /*
 |--------------------------------------------------------------------------
@@ -57,9 +65,9 @@ $app->singleton(
 |
 */
 
-// $app->middleware([
-//     App\Http\Middleware\ExampleMiddleware::class
-// ]);
+$app->middleware([
+    \Fruitcake\Cors\HandleCors::class,
+]);
 
 // $app->routeMiddleware([
 //     'auth' => App\Http\Middleware\Authenticate::class,
