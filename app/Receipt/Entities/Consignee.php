@@ -20,7 +20,6 @@ class Consignee extends Model
         'zip',
         'first_line',
         'second_line',
-        'formatted_address',
         'phone',
         'update_time',
     ];
