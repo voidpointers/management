@@ -22,6 +22,6 @@ class ReceiptsController extends Controller
     public function index(Request $request)
     {
         $receipts = $this->receiptRequest->filters($request->all());
-        return Receipt::store($receipts);
+        return (new Receipt)->store($receipts);
     }
 }
