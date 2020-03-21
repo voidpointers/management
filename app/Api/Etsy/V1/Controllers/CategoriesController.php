@@ -2,26 +2,27 @@
 
 namespace Api\Etsy\V1\Controllers;
 
-use Api\Controller;
+use App\Controller;
 use Dingo\Api\Http\Request;
+use Voidpointers\Etsy\Facades\Etsy;
 
 class CategoriesController extends Controller
 {
     public function index()
     {
-        return \Etsy::findAllTopCategory();
+        return Etsy::findAllTopCategory();
     }
 
     public function sub(Request $request)
     {
-        return \Etsy::findAllTopCategoryChildren([
+        return Etsy::findAllTopCategoryChildren([
             'params' => ['tag' => $request->input('tag')],
         ]);
     }
 
     public function third(Request $request)
     {
-        return \Etsy::findAllSubCategoryChildren([
+        return Etsy::findAllSubCategoryChildren([
             'params' => [
                 'tag' => $request->input('tag'),
                 'subtag' => $request->input('subtag'),
@@ -31,6 +32,6 @@ class CategoriesController extends Controller
 
     public function taxonomy()
     {
-        return \Etsy::getSellerTaxonomy();
+        return Etsy::getSellerTaxonomy();
     }
 }

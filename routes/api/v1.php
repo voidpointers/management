@@ -9,12 +9,11 @@ $api->version('v1', [
         'namespace' => 'Api\Receipt\V1\Controllers',
         'prefix' => 'receipts',
     ], function ($api) {
-        $api->get('lists', 'ReceiptsController@lists');
+        $api->resource('receipts', 'ReceiptsController');
         $api->get('export', 'ReceiptsController@export');
-        $api->get('sales/export', 'SalesController@export');
         $api->post('import', 'ReceiptsController@import');
+        $api->get('sales/export', 'SalesController@export');
         $api->post('close', 'ReceiptsController@close');
-        $api->post('{receipt_sn}/update', 'ReceiptsController@update');
         $api->post('transaction/{receipt_sn}/create', 'TransactionsController@create');
         $api->post('consignee/{receipt_sn}/update', 'ConsigneesController@update');
     });

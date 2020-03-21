@@ -2,57 +2,30 @@
 
 namespace Api\Etsy\V1\Controllers;
 
-use Api\Controller;
+use App\Controller;
 use Dingo\Api\Http\Request;
 use Listing\Services\ListingService;
+use Voidpointers\Etsy\Facades\Etsy;
 
 /**
  * 产品控制器
  */
 class ListingsController extends Controller
 {
-    protected $listingService;
-
-    /**
-     * Constructor.
-     */
-    public function __construct(ListingService $listingService)
+    public function lists(Request $request)
     {
-        $this->listingService = $listingService;
-    }
-
-    /**
-     * 拉取Etsy产品
-     *
-     * @return
-     */
-    public function index($shop_id, Request $request)
-    {
-        $request->offsetSet('shop_id', $shop_id);
-        $data = $this->listingService->lists($request->all());
-        return $this->response->array($data);
+        return Etsy::findAllListingActive([
+            'params' => $request->all(),
+            'associations' => ['Images']
+        ]);
     }
 
     public function inventory($listing_id)
     {
-        $data = \Etsy::getInventory([
+        return Etsy::getInventory([
             'params' => [
                 'listing_id' => $listing_id
             ]
         ]);
-
-        return $this->response->array($data);
-    }
-
-    public function all(Request $request)
-    {
-        return \Etsy::findAllListingActive([
-            'params' => $request->all()
-        ]);
-    }
-
-    public function create()
-    {
-
     }
 }

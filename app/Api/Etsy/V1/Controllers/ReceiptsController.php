@@ -2,34 +2,22 @@
 
 namespace Api\Etsy\V1\Controllers;
 
-use Api\Controller;
+use App\Controller;
 use Dingo\Api\Http\Request;
-use Receipt\Services\ReceiptService;
+use Voidpointers\Etsy\Facades\Etsy;
 
 /**
  * 收据控制器
  */
 class ReceiptsController extends Controller
 {
-    protected $receiptService;
-
-    /**
-     * Constructor.
-     */
-    public function __construct(ReceiptService $receiptService)
+    public function index(Request $request)
     {
-        $this->receiptService = $receiptService;
-    }
-
-    /**
-     * 拉取Etsy订单
-     * 
-     * @return
-     */
-    public function pull(Request $request)
-    {
-        $this->receiptService->lists();
-
-        return ['msg' => 'success'];
+        return Etsy::findAllShopReceipts([
+            'params' => $request->all(),
+            'associations' => [
+                'Transactions' => ['associations' => ['MainImage']]
+            ]
+        ]);
     }
 }

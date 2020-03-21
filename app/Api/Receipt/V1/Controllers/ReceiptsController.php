@@ -2,7 +2,7 @@
 
 namespace Api\Receipt\V1\Controllers;
 
-use Api\Controller;
+use App\Controller;
 use Api\Receipt\V1\Exports\ReceiptsExport;
 use Api\Receipt\V1\Imports\ReceiptImport;
 use Api\Receipt\V1\Requests\ReceiptRequest;
@@ -34,18 +34,13 @@ class ReceiptsController extends Controller
      * @param Request $request
      * @return string
      */
-    public function lists(Request $request)
+    public function index(Request $request)
     {
         $receipts = Receipt::with(['consignee', 'transaction', 'logistics'])
             ->orderBy('id', 'desc')
             ->paginate($request->get('limit', 30));
 
         return $this->response->paginator($receipts, new ReceiptTransformer);
-    }
-
-    public function create()
-    {
-
     }
 
     /**
@@ -70,7 +65,7 @@ class ReceiptsController extends Controller
     /**
      * 更新
      */
-    public function update(ReceiptRequest $request, $receipt_sn)
+    public function update($receipt_sn, ReceiptRequest $request)
     {
         $validated = $request->validated();
         if (!$validated) {
@@ -80,11 +75,6 @@ class ReceiptsController extends Controller
         Receipt::where(['receipt_sn' => $receipt_sn])->update($validated);
 
         return $this->response->array(['msg' => 'success']);
-    }
-
-    public function copy()
-    {
-
     }
 
     /**

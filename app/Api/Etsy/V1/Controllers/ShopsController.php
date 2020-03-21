@@ -2,27 +2,26 @@
 
 namespace Api\Etsy\V1\Controllers;
 
-use Api\Controller;
+use App\Controller;
 use Dingo\Api\Http\Request;
-use Shop\Requests\ShopRequest;
+use Voidpointers\Etsy\Facades\Etsy;
 
 class ShopsController extends Controller
 {
-    protected $shopRequest;
-
-    public function __construct(ShopRequest $shopRequest)
-    {
-        $this->shopRequest = $shopRequest;
-    }
-
     public function index($shop_id, Request $request)
     {
-        return $this->shopRequest->getShop($shop_id);
+        return Etsy::getShop([
+            'params' => $request->all(),
+            'associations' => [
+                'User' => ['associations' => ['User']]
+            ]
+        ]);
     }
 
     public function update($shop_id, Request $request)
     {
-        $request->offsetSet('shop_id', $shop_id);
-        return $this->shopRequest->updateShop($request->all());
+        return Etsy::updateShop([
+            'params' => $request->all()
+        ]);
     }
 }
