@@ -29,6 +29,7 @@
             "Api\\": "app/Api",
             "Receipt\\": "app/Receipt",
             "Voidpointers\\Yunexpress\\": "packages/voidpointers/yunexpress/src",
+            "Voidpointers\\Etsy\\": "packages/voidpointers/etsy/src",
             "Logistics\\": "app/Logistics",
             "Express\\": "app/Express",
             "Package\\": "app/Package",
