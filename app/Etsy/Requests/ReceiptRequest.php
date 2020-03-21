@@ -44,14 +44,12 @@ class ReceiptRequest
             return !in_array($value, $temp);
         });
 
-        // 为每组数据添加唯一编号
         $data = [];
         foreach ($receipts as $id => $value) {
             if (in_array($id, $temp)) {
                 continue;
             }
             $data[$id] = $value;
-            $data[$id]['receipt_sn'] = generate_unique_id();
             $data[$id]['status'] = $value['was_shipped'] ? 8 : 1;
         }
 
