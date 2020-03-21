@@ -44,6 +44,22 @@ class ReceiptsController extends Controller
     }
 
     /**
+     * 获取详情
+     * 
+     * @param string $receipt_sn
+     * @return
+     */
+    public function show($receipt_sn)
+    {
+        $receipt = Receipt::where(['receipt_sn' => $receipt_sn])
+        ->with(['consignee', 'transaction', 'logistics'])
+        ->orderBy('id', 'desc')
+        ->first();
+
+        return $this->response->item($receipt, new ReceiptTransformer);
+    }
+
+    /**
      * 关闭
      */
     public function close(Request $request)

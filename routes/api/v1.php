@@ -7,7 +7,6 @@ $api->version('v1', [
 ], function ($api) {
     $api->group([
         'namespace' => 'Api\Receipt\V1\Controllers',
-        'prefix' => 'receipts',
     ], function ($api) {
         $api->resource('receipts', 'ReceiptsController');
         $api->get('export', 'ReceiptsController@export');
