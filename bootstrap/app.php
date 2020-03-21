@@ -67,6 +67,7 @@ $app->singleton(
 
 $app->middleware([
     \Fruitcake\Cors\HandleCors::class,
+    App\Http\Middleware\ShopSwitch::class,
 ]);
 
 // $app->routeMiddleware([

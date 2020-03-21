@@ -1,7 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 if (!function_exists('generate_unique_id')) {
     /**
@@ -61,5 +64,42 @@ if (!function_exists('camelize')) {
         $uncamelized_words = $separator. str_replace($separator, " ", strtolower($uncamelized_words));
 
         return ltrim(str_replace(" ", "", ucwords($uncamelized_words)), $separator );
+    }
+}
+
+if (!function_exists('custom_log')) {
+    /**
+     * 自定义日志
+     *
+     * @param string $level
+     * @param string $path
+     * @param $msg
+     */
+    function custom_log(string $level, string $path, $msg)
+    {
+        $log = new Logger('');
+        try {
+            $log->pushHandler(new StreamHandler(storage_path('logs/' . $path)));
+        } catch (Exception $e) {
+
+        }
+
+        $msg = is_array($msg) ? json_encode($msg) : $msg;
+        $log->log($level, $msg);
+    }
+}
+
+if (!function_exists('shop_id')) {
+    function shop_id()
+    {
+        return Cache::store('array')->get('shop_id');
+    }
+}
+
+if (!function_exists('current_user')) {
+    function current_user()
+    {
+        $shop_id = Cache::store('array')->get('shop_id');
+        return (int) config('shops')[$shop_id]['user_id'];
     }
 }

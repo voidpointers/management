@@ -3,8 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Cache;
 
-class ExampleMiddleware
+class ShopSwitch
 {
     /**
      * Handle an incoming request.
@@ -15,6 +16,7 @@ class ExampleMiddleware
      */
     public function handle($request, Closure $next)
     {
+        Cache::store('array')->put('shop_id', $request->header('shop_id'));
         return $next($request);
     }
 }
