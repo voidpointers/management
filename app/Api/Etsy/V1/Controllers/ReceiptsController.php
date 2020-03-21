@@ -20,6 +20,9 @@ class ReceiptsController extends Controller
 
     public function index(Request $request)
     {
-        return $this->receiptRequest->filters($request->all());
+        $params = $request->all();
+        $params['shop_id'] = shop_id();
+
+        return $this->receiptRequest->filters($params);
     }
 }

@@ -15,8 +15,6 @@ class ReceiptRequest
      */
     public function receipts(array $params)
     {
-        $params['shop_id'] = shop_id();
-
         $receipts = Etsy::findAllShopReceipts([
             'params' => $params,
             'associations' => [
