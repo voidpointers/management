@@ -28,7 +28,6 @@ class CreateReceiptsTable extends Migration
             $table->tinyInteger('is_follow')->unsigned()->default(0)->comment('是否跟进');
             $table->tinyInteger('logistics_speed')->unsigned()->default(0)->comment('物流速度');
             $table->bigInteger('package_sn')->unsigned()->default(0)->comment('包裹编号');
-            $table->string('currency_code')->default('')->comment('卖方本币ISO代码');
             $table->string('payment_method')->default('')->comment('支付方式 pp，cc，ck，mo(Paypal，信用卡，支票，汇票)');
             $table->decimal('total_price', 12, 2)->unsigned()->default(0)->comment('总额（价格*数量）不含税或运费');
             $table->decimal('subtotal', 12, 2)->unsigned()->default(0)->comment('总额减去优惠券折扣，不含税或运费');

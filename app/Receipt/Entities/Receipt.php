@@ -14,8 +14,7 @@ class Receipt extends Model
 {
     protected $fillable = [
         'receipt_id', 'shop_id', 'type', 'order_id', 'seller_user_id', 'buyer_user_id',
-        'buyer_email', 'status', 'customize_status', 'is_follow',
-        'logistics_speed', 'package_sn', 'currency_code', 'payment_method',
+        'buyer_email', 'status', 'package_sn', 'payment_method',
         'total_price', 'subtotal', 'grandtotal', 'adjusted_grandtotal', 'total_tax_cost',
         'total_vat_cost', 'total_shipping_cost', 'seller_msg', 'buyer_msg', 'buyer_msg_zh',
         'remark', 'creation_tsz', 'modified_tsz', 'create_time', 'update_time', 'packup_time',
@@ -92,6 +91,8 @@ class Receipt extends Model
 
     public function store(array $params)
     {
+        $shop_id = shop_id();
+
         $data = [];
         // 参数过滤
         foreach ($params as $key => $param) {
@@ -100,6 +101,7 @@ class Receipt extends Model
                     $data[$key][$fillable] = $value;
                 }
             }
+            $data[$key]['shop_id'] = $shop_id;
             $data[$key]['modified_tsz'] = $param['last_modified_tsz'] ?? 0;
             $data[$key]['create_time'] = time();
             $data[$key]['update_time'] = time();
