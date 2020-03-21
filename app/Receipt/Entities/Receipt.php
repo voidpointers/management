@@ -13,8 +13,8 @@ use Package\Entities\Logistics;
 class Receipt extends Model
 {
     protected $fillable = [
-        'receipt_sn', 'shop_id', 'type', 'receipt_id', 'order_id', 'seller_user_id',
-        'buyer_user_id', 'buyer_email', 'status', 'customize_status', 'is_follow',
+        'receipt_id', 'shop_id', 'type', 'order_id', 'seller_user_id', 'buyer_user_id',
+        'buyer_email', 'status', 'customize_status', 'is_follow',
         'logistics_speed', 'package_sn', 'currency_code', 'payment_method',
         'total_price', 'subtotal', 'grandtotal', 'adjusted_grandtotal', 'total_tax_cost',
         'total_vat_cost', 'total_shipping_cost', 'seller_msg', 'buyer_msg', 'buyer_msg_zh',
@@ -98,8 +98,13 @@ class Receipt extends Model
             foreach ($this->fillable as $fillable) {
                 $data[$key][$fillable] = $param[$fillable] ?? '';
             }
+            $data[$key]['modified_tsz'] = $param['last_modified_tsz'] ?? 0;
+            $data[$key]['create_time'] = time();
+            $data[$key]['update_time'] = time();
+            $data[$key]['type'] = 1;
+            $data[$key]['complete_time'] = $param['was_shipped'] 
+                ? $param['last_modified_tsz'] : 0;
         }
-        dd($data);
 
         return self::insert($data);
     }
