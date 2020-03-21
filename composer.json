@@ -33,7 +33,8 @@
             "Express\\": "app/Express",
             "Package\\": "app/Package",
             "System\\": "app/System",
-            "Common\\": "app/Common"
+            "Common\\": "app/Common",
+            "Etsy\\": "app/Etsy"
         }
     },
     "autoload-dev": {
