@@ -78,9 +78,9 @@ class ReceiptPull extends Command
         }
 
         // 入库
-        (new Receipt())->store($params);
-        (new Transaction())->store($params);
-        (new Consignee())->store($params);
+        (new Receipt())->store($data);
+        (new Transaction())->store($data);
+        (new Consignee())->store($data);
 
         echo json_encode($params) . " 执行完毕" . PHP_EOL;
         usleep(100);
