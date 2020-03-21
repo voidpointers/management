@@ -5,6 +5,7 @@ namespace Api\Etsy\V1\Controllers;
 use App\Controller;
 use Dingo\Api\Http\Request;
 use Etsy\Requests\ReceiptRequest;
+use Receipt\Entities\Consignee;
 
 /**
  * 收据控制器
@@ -23,6 +24,7 @@ class ReceiptsController extends Controller
         $params = $request->all();
         $params['shop_id'] = shop_id();
 
-        return $this->receiptRequest->filters($params);
+        $data = $this->receiptRequest->filters($params);
+        (new Consignee)->store($data);
     }
 }
