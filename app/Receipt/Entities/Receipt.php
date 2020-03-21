@@ -97,7 +97,7 @@ class Receipt extends Model
         // 参数过滤
         foreach ($params as $key => $param) {
             foreach ($this->fillable as $fillable) {
-                if ($value = $param[$fillable] ?? '') {
+                if (($value = $param[$fillable] ?? '')) {
                     $data[$key][$fillable] = $value;
                 }
             }
