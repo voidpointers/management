@@ -10,7 +10,6 @@ class ConsigneeTransformer implements TransformerInterface
     {
         return [
             'receipt_id' => $receipt['receipt_id'],
-            'receipt_sn' => $receipt['receipt_sn'],
             'country_id' => $receipt['country_id'],
             'name' => $receipt['name'] ?? '',
             'state' => $receipt['state'] ?? '',

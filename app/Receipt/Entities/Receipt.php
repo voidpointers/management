@@ -96,7 +96,9 @@ class Receipt extends Model
         // 参数过滤
         foreach ($params as $key => $param) {
             foreach ($this->fillable as $fillable) {
-                $data[$key][$fillable] = $param[$fillable] ?? '';
+                if ($value = $param[$fillable] ?? '') {
+                    $data[$key][$fillable] = $value;
+                }
             }
             $data[$key]['modified_tsz'] = $param['last_modified_tsz'] ?? 0;
             $data[$key]['create_time'] = time();
