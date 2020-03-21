@@ -4,6 +4,9 @@ namespace App\Console\Commands;
 
 use Etsy\Requests\ReceiptRequest;
 use Illuminate\Console\Command;
+use Receipt\Entities\Consignee;
+use Receipt\Entities\Receipt;
+use Receipt\Entities\Transaction;
 use Receipt\Services\ReceiptService;
 
 class ReceiptPull extends Command
@@ -13,7 +16,7 @@ class ReceiptPull extends Command
      *
      * @var string
      */
-    protected $signature = 'receipt:pull {method} {--page=} {--limit=}';
+    protected $signature = 'receipt:pull {method} {--page=} {--limit=} {--shop=}';
 
     /**
      * The console command description.
@@ -21,8 +24,6 @@ class ReceiptPull extends Command
      * @var string
      */
     protected $description = '拉取订单';
-
-    protected $receiptService;
 
     protected $receiptRequest;
 
@@ -32,10 +33,8 @@ class ReceiptPull extends Command
      * @return void
      */
     public function __construct(
-        ReceiptService $receiptService,
         ReceiptRequest $receiptRequest)
     {
-        $this->receiptService = $receiptService;
         $this->receiptRequest = $receiptRequest;
         parent::__construct();
     }
@@ -47,7 +46,7 @@ class ReceiptPull extends Command
      */
     public function handle()
     {
-        $shop_id = $this->option('shop_id');
+        $shop_id = $this->option('shop');
         $page = $this->option('page') ?? 1;
         $limit = $this->option('limit') ?? 5;
 
@@ -79,7 +78,9 @@ class ReceiptPull extends Command
         }
 
         // 入库
-        $this->receiptService->create($data);
+        (new Receipt())->store($params);
+        (new Transaction())->store($params);
+        (new Consignee())->store($params);
 
         echo json_encode($params) . " 执行完毕" . PHP_EOL;
         usleep(100);

@@ -24,4 +24,19 @@ class Consignee extends Model
         'phone',
         'update_time',
     ];
+
+    public function store(array $params)
+    {
+        $data = [];
+        // 参数过滤
+        foreach ($params as $key => $param) {
+            foreach ($this->fillable as $fillable) {
+                if ($value = $param[$fillable] ?? '') {
+                    $data[$key][$fillable] = $value;
+                }
+            }
+        }
+
+        self::insert($data);
+    }
 }
