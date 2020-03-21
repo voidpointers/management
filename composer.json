@@ -40,6 +40,9 @@
     "autoload-dev": {
         "classmap": [
             "tests/"
+        ],
+        "files": [
+            "bootstrap/helpers.php"
         ]
     },
     "scripts": {
