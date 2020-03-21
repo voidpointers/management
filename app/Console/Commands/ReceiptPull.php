@@ -47,8 +47,8 @@ class ReceiptPull extends Command
     public function handle()
     {
         $shop_id = $this->option('shop');
-        $page = $this->option('page') ?? 1;
         $limit = $this->option('limit') ?? 5;
+        $page = $this->option('page') ?? 1;
 
         if ('page' == $this->argument('method')) {
             for ($i = $page; $i > 0; $i--) {
