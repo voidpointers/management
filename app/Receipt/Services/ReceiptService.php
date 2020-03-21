@@ -11,7 +11,7 @@ class ReceiptService
     public function create(array $params)
     {
         Receipt::store($params);
-        Transaction::insert($params['transaction']);
-        Consignee::insert($params['consignee']);
+        Transaction::store($params);
+        Consignee::store($params);
     }
 }

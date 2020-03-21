@@ -5,6 +5,7 @@ namespace Api\Etsy\V1\Controllers;
 use App\Controller;
 use Dingo\Api\Http\Request;
 use Etsy\Requests\ReceiptRequest;
+use Receipt\Entities\Receipt;
 
 /**
  * 收据控制器
@@ -20,6 +21,7 @@ class ReceiptsController extends Controller
 
     public function index(Request $request)
     {
-        return $this->receiptRequest->filters($request->all());
+        $receipts = $this->receiptRequest->filters($request->all());
+        return Receipt::store($receipts);
     }
 }

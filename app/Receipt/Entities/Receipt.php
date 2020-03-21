@@ -92,9 +92,14 @@ class Receipt extends Model
 
     public function store(array $params)
     {
+        // 参数过滤
         $fillable = $this->fillable;
         $data = array_map(function ($value) use ($fillable) {
+            foreach ($fillable as $item) {
+                return $value[$item] ?? '';
+            }
         }, $params);
+        dd($data);
 
         return self::insert($data);
     }
