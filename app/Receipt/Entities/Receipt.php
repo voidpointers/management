@@ -108,6 +108,7 @@ class Receipt extends Model
                 ? $param['last_modified_tsz'] : 0;
             $data[$key]['seller_msg'] = $param['message_from_seller'] ?? '';
             $data[$key]['buyer_msg'] = $param['message_from_buyer'] ?? '';
+            $data[$key]['buyer_msg_zh'] = '';
         }
 
         return self::insert($data);
