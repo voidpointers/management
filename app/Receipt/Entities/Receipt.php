@@ -91,8 +91,6 @@ class Receipt extends Model
 
     public function store(array $params)
     {
-        $shop_id = shop_id();
-
         $data = [];
         // 参数过滤
         foreach ($params as $key => $param) {
@@ -101,7 +99,6 @@ class Receipt extends Model
                     $data[$key][$fillable] = $value;
                 }
             }
-            $data[$key]['shop_id'] = $shop_id;
             $data[$key]['modified_tsz'] = $param['last_modified_tsz'] ?? 0;
             $data[$key]['create_time'] = time();
             $data[$key]['update_time'] = time();
