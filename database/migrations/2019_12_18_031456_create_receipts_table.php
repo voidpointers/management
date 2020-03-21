@@ -16,10 +16,9 @@ class CreateReceiptsTable extends Migration
     {
         Schema::create('receipts', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('receipt_sn')->unsigned()->default(0)->comment('唯一编号');
+            $table->bigInteger('receipt_id')->unsigned()->default(0)->comment('Etsy收据ID');
             $table->integer('shop_id')->unsigned()->default(0)->comment('店铺ID');
             $table->tinyInteger('type')->unsigned()->default(0)->comment('类型 1 正常订单 2 定制订单');
-            $table->bigInteger('receipt_id')->unsigned()->default(0)->comment('Etsy收据ID');
             $table->bigInteger('order_id')->unsigned()->default(0)->comment('订单ID');
             $table->bigInteger('seller_user_id')->unsigned()->default(0)->comment('卖家用户ID');
             $table->bigInteger('buyer_user_id')->unsigned()->default(0)->comment('买家用户ID');
@@ -50,7 +49,7 @@ class CreateReceiptsTable extends Migration
             $table->integer('dispatch_time')->unsigned()->default(0)->comment('发货时间');
             $table->integer('close_time')->unsigned()->default(0)->comment('取消时间');
             $table->integer('complete_time')->unsigned()->default(0)->comment('完成时间');
-            $table->unique('receipt_sn', 'uk_receipt_sn');
+            $table->unique('receipt_id', 'uk_receipt_id');
             $table->unique(['type', 'shop_id', 'receipt_id'], 'uk_receipt_id');
             $table->index('package_sn', 'idx_package_sn');
             $table->index('buyer_user_id', 'idx_buyer_user_id');

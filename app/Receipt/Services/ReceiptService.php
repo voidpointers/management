@@ -10,7 +10,7 @@ class ReceiptService
 {
     public function create(array $params)
     {
-        Receipt::store($params);
+        (new Receipt)->store($params);
         Transaction::store($params);
         Consignee::store($params);
     }

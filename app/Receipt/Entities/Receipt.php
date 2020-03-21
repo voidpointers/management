@@ -97,7 +97,6 @@ class Receipt extends Model
         foreach ($params as $param) {
             $data[] = $this->fill($param);
         }
-        dd($data);
 
         return self::insert($data);
     }
