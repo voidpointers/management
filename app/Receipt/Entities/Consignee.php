@@ -35,6 +35,7 @@ class Consignee extends Model
                     $data[$key][$fillable] = $value;
                 }
             }
+            $data['receipt_id'] = $param['receipt_id'];
         }
 
         self::insert($data);
