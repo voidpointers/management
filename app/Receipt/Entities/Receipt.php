@@ -106,6 +106,8 @@ class Receipt extends Model
             $data[$key]['type'] = 1;
             $data[$key]['complete_time'] = $param['was_shipped'] 
                 ? $param['last_modified_tsz'] : 0;
+            $data[$key]['seller_msg'] = $param['message_from_seller'] ?? '';
+            $data[$key]['buyer_msg'] = $param['message_from_buyer'] ?? '';
         }
 
         return self::insert($data);
