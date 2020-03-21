@@ -19,7 +19,6 @@ class Consignee extends Model
         'first_line',
         'second_line',
         'phone',
-        'update_time',
     ];
 
     public function store(array $params)
@@ -28,9 +27,7 @@ class Consignee extends Model
         // 参数过滤
         foreach ($params as $key => $param) {
             foreach ($this->fillable as $fillable) {
-                if ($value = $param[$fillable] ?? '') {
-                    $data[$key][$fillable] = $value;
-                }
+                $data[$key][$fillable] = $param[$fillable] ?? '';
             }
             $data[$key]['receipt_id'] = $param['receipt_id'];
         }
