@@ -67,4 +67,10 @@ $api->version('v1', [
         $api->resource('shops', 'ShopsController');
         $api->post('upload', 'FilesController@fileUpload');
     });
+    $api->group([
+        'namespace' => 'Api\Etsy\V1\Controllers',
+        'prefix' => 'etsy'
+    ], function ($api) {
+        $api->resource('receipts', 'ReceiptsController');
+    });
 });

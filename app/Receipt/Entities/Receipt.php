@@ -12,6 +12,16 @@ use Package\Entities\Logistics;
  */
 class Receipt extends Model
 {
+    protected $fillable = [
+        'receipt_sn', 'shop_id', 'type', 'receipt_id', 'order_id', 'seller_user_id',
+        'buyer_user_id', 'buyer_email', 'status', 'customize_status', 'is_follow',
+        'logistics_speed', 'package_sn', 'currency_code', 'payment_method',
+        'total_price', 'subtotal', 'grandtotal', 'adjusted_grandtotal', 'total_tax_cost',
+        'total_vat_cost', 'total_shipping_cost', 'seller_msg', 'buyer_msg', 'buyer_msg_zh',
+        'remark', 'creation_tsz', 'modified_tsz', 'create_time', 'update_time', 'packup_time',
+        'dispatch_time', 'close_time', 'complete_time'
+    ];
+
     protected $appends = ['status_str'];
 
     protected const STATUS = [
@@ -78,5 +88,14 @@ class Receipt extends Model
         }
 
         return $query->with(['consignee', 'transaction'])->get();
+    }
+
+    public function store(array $params)
+    {
+        $fillable = $this->fillable;
+        $data = array_map(function ($value) use ($fillable) {
+        }, $params);
+
+        return self::insert($data);
     }
 }

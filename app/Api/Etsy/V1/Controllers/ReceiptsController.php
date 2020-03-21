@@ -4,20 +4,22 @@ namespace Api\Etsy\V1\Controllers;
 
 use App\Controller;
 use Dingo\Api\Http\Request;
-use Voidpointers\Etsy\Facades\Etsy;
+use Etsy\Requests\ReceiptRequest;
 
 /**
  * 收据控制器
  */
 class ReceiptsController extends Controller
 {
+    protected $receiptRequest;
+
+    public function __construct(ReceiptRequest $receiptRequest)
+    {
+        $this->receiptRequest = $receiptRequest;
+    }
+
     public function index(Request $request)
     {
-        return Etsy::findAllShopReceipts([
-            'params' => $request->all(),
-            'associations' => [
-                'Transactions' => ['associations' => ['MainImage']]
-            ]
-        ]);
+        return $this->receiptRequest->filters($request->all());
     }
 }

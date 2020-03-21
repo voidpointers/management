@@ -60,6 +60,21 @@ class ReceiptsController extends Controller
     }
 
     /**
+     * 更新
+     */
+    public function update($receipt_sn, ReceiptRequest $request)
+    {
+        $validated = $request->validated();
+        if (!$validated) {
+            return $this->response->error('缺少必要参数', 500);
+        }
+
+        Receipt::where(['receipt_sn' => $receipt_sn])->update($validated);
+
+        return $this->response->array(['msg' => 'success']);
+    }
+
+    /**
      * 关闭
      */
     public function close(Request $request)
@@ -76,21 +91,6 @@ class ReceiptsController extends Controller
         }
 
         return $this->response->noContent();
-    }
-
-    /**
-     * 更新
-     */
-    public function update($receipt_sn, ReceiptRequest $request)
-    {
-        $validated = $request->validated();
-        if (!$validated) {
-            return $this->response->error('缺少必要参数', 500);
-        }
-
-        Receipt::where(['receipt_sn' => $receipt_sn])->update($validated);
-
-        return $this->response->array(['msg' => 'success']);
     }
 
     /**
