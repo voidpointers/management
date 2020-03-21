@@ -94,9 +94,12 @@ class Receipt extends Model
     {
         $data = [];
         // 参数过滤
-        foreach ($params as $param) {
-            $data[] = $this->fill($param);
+        foreach ($params as $key => $param) {
+            foreach ($this->fillable as $fillable) {
+                $data[$key][$fillable] = $param[$fillable] ?? '';
+            }
         }
+        dd($data);
 
         return self::insert($data);
     }
