@@ -38,9 +38,9 @@ class ReceiptRequest
         // 获取已入库数据
         $temp = Receipt::whereIn(
             'receipt_id', array_keys($receipts)
-        )->pluck('receipt_id');
+        )->pluck('receipt_id')->all();
 
-        $data = array_filter($receipts, function ($value, $key) use ($temp) {
+        $data = array_filter($receipts, function ($value) use ($temp) {
             return !in_array($value, $temp);
         });
 
