@@ -8,8 +8,6 @@ class Consignee extends Model
 {
     protected $table = 'receipt_consignees';
 
-    protected $guarded = ['receipt_sn'];
-
     protected $fillable = [
         'country_id',
         'country_code',
