@@ -49,6 +49,7 @@ class ReceiptRequest
             }
             $data[$id] = $value;
             $data[$id]['status'] = $value['was_shipped'] ? 8 : 1;
+            $data[$id]['shop_id'] = $params['shop_id'];
         }
 
         // 数据倒序排列
