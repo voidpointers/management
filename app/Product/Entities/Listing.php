@@ -47,14 +47,15 @@ class Listing extends Model
         return $this->hasMany(Inventory::class, 'listing_id', 'listing_id');
     }
 
-    public function store($shop_id, $params)
+    public function store($params)
     {
+        $shop_id = shop_id();
+
         $listing_ids = self::whereIn('listing_id', array_column($params, 'listing_id'))
         ->pluck('listing_id')
         ->all();
 
         $update = $create = [];
-
         foreach ($params as $key => $param) {
             $param['shop_id'] = $shop_id;
 

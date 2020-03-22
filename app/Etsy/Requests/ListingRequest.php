@@ -2,39 +2,44 @@
 
 namespace Etsy\Requests;
 
-use GuzzleHttp\Client;
 use Product\Entities\Image;
 use Product\Entities\Listing;
+use Voidpointers\Etsy\Facades\Etsy;
 
 class ListingRequest
 {
-    public function pull($shop_id)
+    public function pull($params)
     {
         set_time_limit(0);
 
-        $url = env('ETSY_URL') . "/listings/{$shop_id}";
-
-        $client = new Client();
-
         $page = 1;
         while ($page) {
-            $response = $client->request('GET', $url, [
-                'auth' => ['user', 'pass'],
-                'query' => ['limit' => 25, 'page' => $page]
+            $listings = Etsy::findAllShopListingsActive([
+                'params' => $params,
+                'associations' => ['Images']
             ]);
-            $body = json_decode($response->getBody()->getContents(), true);
+
+            $data = $listings['results'];
+
+            $inventory = [];
+            foreach ($data as $key => $datum) {
+                $temp = Etsy::getInventory([
+                    'params' => [
+                        'listing_id' => $datum['listing_id']
+                    ]
+                ]);
+                $inventory[$key] = $temp;
+            }
+            dd($inventory);
 
             // 存储到数据库
-            $data = $body['results'];
-            (new Listing)->store($shop_id, $data);
+            (new Listing)->store($data);
             (new Image())->store($data);
-            foreach ($data as $datum) {
-                (new InventoryRequest())->pull($datum['listing_id']);
-            }
+            (new Inventory)->store($data);
 
             echo "当前处理页数: " . $page . PHP_EOL;
             // 最后一页为null，退出循环
-            $page = $body['pagination']['next_page'];
+            $page = $listings['pagination']['next_page'];
             usleep(100);
         }
         return true;
