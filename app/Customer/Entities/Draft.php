@@ -1,9 +1,8 @@
 <?php
 
-namespace Message\Entities;
+namespace Customer\Entities;
 
 use App\Model;
-use User\Entities\User;
 
 class Draft extends Model
 {
@@ -11,6 +10,6 @@ class Draft extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'user_id', 'sender_id');
+        return $this->hasOne(Customer::class, 'user_id', 'sender_id');
     }
 }

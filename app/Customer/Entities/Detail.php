@@ -6,10 +6,6 @@ use App\Model;
 
 class Detail extends Model
 {
-    protected $connection = 'mongodb';
-
-    protected $collection = 'message_details';
-
     protected $appends = ['is_me'];
 
     public const CREATED_AT = null;
@@ -18,7 +14,7 @@ class Detail extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'user_id', 'sender_id');
+        return $this->hasOne(Customer::class, 'user_id', 'sender_id');
     }
 
     public function getImagesAttribute()

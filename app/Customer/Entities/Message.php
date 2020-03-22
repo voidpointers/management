@@ -1,6 +1,6 @@
 <?php
 
-namespace Message\Entities;
+namespace Customer\Entities;
 
 use App\Model;
 
@@ -15,7 +15,7 @@ class Message extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'user_id', 'sender_id');
+        return $this->hasOne(Customer::class, 'user_id', 'sender_id');
     }
 
     /**
