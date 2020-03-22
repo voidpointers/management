@@ -22,6 +22,8 @@ class ReceiptsController extends Controller
 {
     protected $stateMachine;
 
+    protected $receipt;
+
     public function __construct(
         Receipt $receipt,
         StateMachine $stateMachine)
@@ -54,7 +56,7 @@ class ReceiptsController extends Controller
      */
     public function show($receipt_sn)
     {
-        $receipt = Receipt::where(['receipt_sn' => $receipt_sn])
+        $receipt = $this->receipt->where(['receipt_sn' => $receipt_sn])
         ->with(['consignee', 'transaction', 'logistics'])
         ->orderBy('id', 'desc')
         ->first();
@@ -72,7 +74,7 @@ class ReceiptsController extends Controller
             return $this->response->error('缺少必要参数', 500);
         }
 
-        Receipt::where(['receipt_sn' => $receipt_sn])->update($validated);
+        $this->receipt->where(['receipt_sn' => $receipt_sn])->update($validated);
 
         return $this->response->array(['msg' => 'success']);
     }
