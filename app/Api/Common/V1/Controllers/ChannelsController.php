@@ -3,7 +3,7 @@
 namespace Api\Common\V1\Controllers;
 
 use App\Controller;
-use Api\Logistics\V1\Transformers\ChannelTransformer;
+use Api\Common\V1\Transformers\ChannelTransformer;
 use Common\Entities\Channel;
 use Dingo\Api\Http\Request;
 

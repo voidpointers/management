@@ -2,8 +2,8 @@
 
 namespace Api\Logistics\V1\Controllers;
 
-use Api\Controller;
-use Api\Logistics\V1\Transformers\ProviderTransformer;
+use App\Controller;
+use Api\Common\V1\Transformers\ProviderTransformer;
 use Logistics\Repositories\ProviderRepository;
 
 class ProvidersController extends Controller
