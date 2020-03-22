@@ -21,10 +21,10 @@ class Inventory extends Model
 
     public function store($params)
     {
-        dd($params);
-        $params = array_map(function ($value) {
-            return [];
+        $params = array_walk_recursive($params, function ($item, $key) {
+            dump($item);
         }, $params);
+        exit;
         $properties = self::whereIn('product_id', array_column($params, 'product_id'))
             ->pluck('product_id')
             ->all();
