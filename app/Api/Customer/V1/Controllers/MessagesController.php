@@ -18,8 +18,8 @@ class MessagesController extends Controller
 
     public function index(Request $request)
     {
-        $data = $this->message->where(['shop_id' => shop_id()])
-        ->applay($request)
+        $data = $this->message->apply($request)
+        ->where(['shop_id' => shop_id()])
         ->with(['user'])
         ->orderBy('update_time', 'desc')
         ->paginate((int) $request->get('limit', 30));
