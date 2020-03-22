@@ -15,7 +15,7 @@ class ProvidersController extends Controller
         $this->provider = $provider;
     }
 
-    public function lists()
+    public function index()
     {
         $providers = $this->provider->with(['channel' => function($query) {
             return $query->where('status', 1);

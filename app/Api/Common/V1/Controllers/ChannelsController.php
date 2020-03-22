@@ -16,7 +16,7 @@ class ChannelsController extends Controller
         $this->channel = $channel;
     }
 
-    public function lists(Request $request)
+    public function index(Request $request)
     {
         $channels = $this->channel->paginate($request->get('limit', 30));
 
