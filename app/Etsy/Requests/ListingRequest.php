@@ -3,6 +3,7 @@
 namespace Etsy\Requests;
 
 use Product\Entities\Image;
+use Product\Entities\Inventory;
 use Product\Entities\Listing;
 use Voidpointers\Etsy\Facades\Etsy;
 
@@ -35,7 +36,7 @@ class ListingRequest
             // 存储到数据库
             (new Listing)->store($data);
             (new Image())->store($data);
-            (new Inventory)->store($data);
+            (new Inventory)->store($inventory);
 
             echo "当前处理页数: " . $page . PHP_EOL;
             // 最后一页为null，退出循环
