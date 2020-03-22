@@ -42,6 +42,8 @@ class ReceiptRequest
             return !in_array($value, $temp);
         });
 
+        // 数据倒序排列
+        $receipts = array_reverse($receipts);
         $data = [];
         foreach ($receipts as $id => $value) {
             if (in_array($id, $temp)) {
@@ -53,7 +55,6 @@ class ReceiptRequest
             $data[$id]['shop_id'] = $params['shop_id'];
         }
 
-        // 数据倒序排列
-        return array_reverse($data);
+        return $data;
     }
 }
