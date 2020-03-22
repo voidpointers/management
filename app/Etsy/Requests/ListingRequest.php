@@ -29,7 +29,7 @@ class ListingRequest
                         'listing_id' => $datum['listing_id']
                     ]
                 ]);
-                $inventory[$key] = $temp;
+                $inventory[$key] = $temp['results']['products'];
             }
             dd($inventory);
 
