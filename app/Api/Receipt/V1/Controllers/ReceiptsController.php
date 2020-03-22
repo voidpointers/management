@@ -38,7 +38,7 @@ class ReceiptsController extends Controller
      */
     public function index(Request $request)
     {
-        $receipts = $this->receipt->filter($request)
+        $receipts = $this->receipt->apply($request)
             ->with(['consignee', 'transaction', 'logistics'])
             ->orderBy('id', 'desc')
             ->paginate($request->get('limit', 30));
