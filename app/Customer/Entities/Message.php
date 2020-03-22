@@ -3,9 +3,12 @@
 namespace Customer\Entities;
 
 use App\Model;
+use Customer\Filters\MessageFilter;
 
 class Message extends Model
 {
+    use MessageFilter;
+
     protected $appends = ['send_time', 'shop_name'];
 
     public function details()

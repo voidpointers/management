@@ -4,7 +4,7 @@ namespace Customer\Filters;
 
 use App\QueryFilter;
 
-class MessageFilter
+trait MessageFilter
 {
     use QueryFilter;
 
