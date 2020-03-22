@@ -24,7 +24,6 @@ class ReceiptsController extends Controller
         $params = $request->all();
         $params['shop_id'] = shop_id();
 
-        $data = $this->receiptRequest->filters($params);
-        (new Consignee)->store($data);
+        return $this->receiptRequest->filters($params);
     }
 }
