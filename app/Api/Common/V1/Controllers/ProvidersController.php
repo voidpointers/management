@@ -1,23 +1,23 @@
 <?php
 
-namespace Api\Logistics\V1\Controllers;
+namespace Api\Common\V1\Controllers;
 
 use App\Controller;
 use Api\Common\V1\Transformers\ProviderTransformer;
-use Logistics\Repositories\ProviderRepository;
+use Common\Entities\Provider;
 
 class ProvidersController extends Controller
 {
-    protected $providerRepository;
+    protected $provider;
 
-    public function __construct(ProviderRepository $providerRepository)
+    public function __construct(Provider $provider)
     {
-        $this->providerRepository = $providerRepository;
+        $this->provider = $provider;
     }
 
     public function lists()
     {
-        $providers = $this->providerRepository->with(['channel' => function($query) {
+        $providers = $this->provider->with(['channel' => function($query) {
             return $query->where('status', 1);
         }])->get();
 
