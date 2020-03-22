@@ -56,5 +56,6 @@ $api->version('v1', [
         'prefix' => 'product'
     ], function ($api) {
         $api->resource('listings', 'ListingsController');
+        $api->get('listings/pull', 'ListingsControler@pull');
     });
 });
