@@ -4,6 +4,7 @@ namespace Receipt\Entities;
 
 use App\Model;
 use Package\Entities\Logistics;
+use Receipt\Filters\ReceiptFilter;
 
 /**
  * 收据模型
@@ -12,6 +13,8 @@ use Package\Entities\Logistics;
  */
 class Receipt extends Model
 {
+    use ReceiptFilter;
+
     protected $fillable = [
         'receipt_sn', 'receipt_id', 'shop_id', 'type', 'order_id', 'seller_user_id', 'buyer_user_id',
         'buyer_email', 'status', 'package_sn', 'payment_method',
