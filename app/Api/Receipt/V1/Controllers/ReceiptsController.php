@@ -36,7 +36,8 @@ class ReceiptsController extends Controller
      */
     public function index(Request $request)
     {
-        $receipts = Receipt::with(['consignee', 'transaction', 'logistics'])
+        $receipts = Receipt::apply($request)
+            ->with(['consignee', 'transaction', 'logistics'])
             ->orderBy('id', 'desc')
             ->paginate($request->get('limit', 30));
 
