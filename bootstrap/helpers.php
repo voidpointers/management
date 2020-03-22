@@ -24,9 +24,15 @@ if (!function_exists('generate_unique_id')) {
 }
 
 if (!function_exists('generate_uniqid')) {
+    /**
+     * 数据库生成唯一ID
+     */
     function generate_uniqid()
     {
-        return substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+        DB::select("REPLACE INTO unique_id_generator (ticket) VALUES ('a')", [], false);
+        $insert = DB::select('SELECT LAST_INSERT_ID() as id', [], false);
+
+        return $insert[0]->id;
     }
 }
 
