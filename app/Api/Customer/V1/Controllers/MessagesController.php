@@ -5,7 +5,7 @@ namespace Api\Customer\V1\Controllers;
 use Api\Message\V1\Transforms\MessageTransformer;
 use App\Controller;
 use Dingo\Api\Http\Request;
-use Message\Entities\Message;
+use Customer\Entities\Message;
 
 class MessagesController extends Controller
 {

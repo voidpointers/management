@@ -36,7 +36,8 @@
             "Package\\": "app/Package",
             "System\\": "app/System",
             "Common\\": "app/Common",
-            "Etsy\\": "app/Etsy"
+            "Etsy\\": "app/Etsy",
+            "Customer\\": "app/Customer"
         }
     },
     "autoload-dev": {
