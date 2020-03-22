@@ -2,7 +2,7 @@
 
 namespace Api\Package\V1\Controllers;
 
-use Api\Controller;
+use App\Controller;
 use Api\Package\V1\Transforms\PackageTransformer;
 use Dingo\Api\Http\Request;
 use Illuminate\Support\Facades\DB;

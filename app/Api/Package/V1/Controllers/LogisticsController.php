@@ -2,7 +2,7 @@
 
 namespace Api\Package\V1\Controllers;
 
-use Api\Controller;
+use App\Controller;
 use Dingo\Api\Http\Request;
 use Express\Services\ExpressService;
 use Logistics\Repositories\ChannelRepository;

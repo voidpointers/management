@@ -7,42 +7,23 @@ $api->version('v1', [
 ], function ($api) {
     $api->group([
         'namespace' => 'Api\Receipt\V1\Controllers',
+        'prefix' => 'order',
     ], function ($api) {
         $api->resource('receipts', 'ReceiptsController');
         $api->get('export', 'ReceiptsController@export');
         $api->post('import', 'ReceiptsController@import');
-        $api->get('sales/export', 'SalesController@export');
         $api->post('close', 'ReceiptsController@close');
+        $api->get('sales/export', 'SalesController@export');
         $api->post('transaction/{receipt_sn}/create', 'TransactionsController@create');
         $api->post('consignee/{receipt_sn}/update', 'ConsigneesController@update');
     });
     $api->group([
-        'namespace' => 'Api\Customization\V1\Controllers',
-        'prefix' => 'customizations',
-    ], function ($api) {
-        $api->get('lists', 'CustomizationController@lists');
-        $api->post('create', 'CustomizationController@create');
-        $api->post('complete', 'CustomizationController@complete');
-        $api->post('close', 'CustomizationController@close');
-    });
-    $api->group([
-        'namespace' => 'Api\Follow\V1\Controllers',
-        'prefix' => 'follows',
-    ], function ($api) {
-        $api->get('lists', 'FollowsController@lists');
-        $api->post('create', 'FollowsController@create');
-        $api->post('complete', 'FollowsController@complete');
-        $api->post('close', 'FollowsController@close');
-    });
-    $api->group([
         'namespace' => 'Api\Package\V1\Controllers',
-        'prefix' => 'packages',
     ], function ($api) {
-        $api->get('lists', 'PackagesController@lists');
-        $api->get('tracking/info/{order_number}', 'LogisticsController@trackInfo');
-        $api->post('create', 'PackagesController@create');
+        $api->resource('packages', 'PackagesController');
         $api->post('dispatch', 'PackagesController@delivery');
         $api->post('print', 'LogisticsController@labels');
+        $api->get('tracking/info/{order_number}', 'LogisticsController@trackInfo');
         $api->post('logistics/create', 'LogisticsController@create');
     });
     $api->group([
@@ -53,15 +34,10 @@ $api->version('v1', [
         $api->get('channel/lists', 'ChannelsController@lists');
     });
     $api->group([
-        'namespace' => 'Api\System\V1\Controllers',
-        'prefix' => 'systems',
-    ], function ($api) {
-        $api->get('country/lists', 'CountriesController@lists');
-    });
-    $api->group([
         'namespace' => 'Api\Common\V1\Controllers',
         'prefix' => 'common'
     ], function ($api) {
+        $api->get('country/lists', 'CountriesController@lists');
         $api->post('register', 'RegisterController@register');
         $api->post('login', 'AuthorizationsController@login');
         $api->resource('shops', 'ShopsController');
@@ -72,5 +48,11 @@ $api->version('v1', [
         'prefix' => 'etsy'
     ], function ($api) {
         $api->resource('receipts', 'ReceiptsController');
+    });
+    $api->group([
+        'namespace' => 'Api\Customer\V1\Controllers',
+        'prefix' => 'customer'
+    ], function ($api) {
+        $api->resource('messages', 'MessagesController');
     });
 });
