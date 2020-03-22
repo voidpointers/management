@@ -22,21 +22,22 @@ class ListingRequest
 
             $data = $listings['results'];
 
-            $inventory = [];
+            $vars = [];
             foreach ($data as $key => $datum) {
+                $listing_id = $datum['listing_id'];
                 $temp = Etsy::getInventory([
                     'params' => [
-                        'listing_id' => $datum['listing_id']
+                        'listing_id' => $listing_id
                     ]
                 ]);
-                $inventory[$key] = $temp['results']['products'];
+                $vars[$key] = $temp['results']['products'];
+                $vars[$key]['listing_id'] = $listing_id;
             }
-            dd($inventory);
 
             // 存储到数据库
-            (new Listing)->store($data);
-            (new Image())->store($data);
-            (new Inventory)->store($inventory);
+            // (new Listing())->store($data);
+            // (new Image)->store($data);
+            (new Inventory)->store($vars);
 
             echo "当前处理页数: " . $page . PHP_EOL;
             // 最后一页为null，退出循环
