@@ -38,8 +38,8 @@ class ListingRequest
             }
 
             // 存储到数据库
-            // (new Listing())->store($data);
-            // (new Image)->store($data);
+            (new Listing())->store($data);
+            (new Image)->store($data);
             (new Inventory)->store($vars);
 
             echo "当前处理页数: " . $page . PHP_EOL;
