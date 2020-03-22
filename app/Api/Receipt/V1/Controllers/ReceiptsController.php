@@ -23,9 +23,11 @@ class ReceiptsController extends Controller
     protected $stateMachine;
 
     public function __construct(
+        Receipt $receipt,
         StateMachine $stateMachine)
     {
         $this->stateMachine = $stateMachine;
+        $this->receipt = $receipt;
     }
 
     /**
@@ -36,7 +38,7 @@ class ReceiptsController extends Controller
      */
     public function index(Request $request)
     {
-        $receipts = Receipt::apply($request)
+        $receipts = $this->receipt->filter($request)
             ->with(['consignee', 'transaction', 'logistics'])
             ->orderBy('id', 'desc')
             ->paginate($request->get('limit', 30));
