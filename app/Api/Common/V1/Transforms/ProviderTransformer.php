@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Common\V1\Transformers;
+namespace Api\Common\V1\Transforms;
 
 use League\Fractal\TransformerAbstract;
 use Common\Entities\Provider;
