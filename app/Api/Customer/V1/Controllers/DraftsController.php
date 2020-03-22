@@ -7,8 +7,8 @@ use Api\Message\V1\Transforms\DraftTransformer;
 use App\Controller;
 use Dingo\Api\Http\Request;
 use Etsy\Requests\ConversationRequest;
-use Message\Entities\Draft;
-use Message\Entities\Message;
+use Customer\Entities\Draft;
+use Customer\Entities\Message;
 
 class DraftsController extends Controller
 {

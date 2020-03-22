@@ -5,7 +5,7 @@ namespace Api\Customer\V1\Controllers;
 use Api\Message\V1\Transforms\DetailTransformer;
 use App\Controller;
 use Dingo\Api\Http\Request;
-use Message\Entities\Detail;
+use Customer\Entities\Detail;
 
 class DetailsController extends Controller
 {

@@ -54,5 +54,6 @@ $api->version('v1', [
         'prefix' => 'customer'
     ], function ($api) {
         $api->resource('messages', 'MessagesController');
+        $api->resource('details', 'DetailsController');
     });
 });
