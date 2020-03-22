@@ -15,7 +15,7 @@ class CountriesController extends Controller
         $this->country = $country;
     }
 
-    public function lists()
+    public function index()
     {
         $data = $this->country->get();
 
