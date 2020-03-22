@@ -21,28 +21,23 @@ class Inventory extends Model
 
     public function store($params)
     {
-        $params = array_walk_recursive($params, function ($item, $key) {
-            dump($item);
-        }, $params);
-        exit;
+        dd($params);
         $properties = self::whereIn('product_id', array_column($params, 'product_id'))
             ->pluck('product_id')
             ->all();
 
         $update = $create = [];
 
-        foreach ($params as $param) {
-            foreach ($params as $key => $param) {
-                if (in_array($param['product_id'], $properties)) {
-                    $update[] = $this->filled($param);
-                    $update[$key]['price'] = $listing_id ? ($param['price'] ?? 0) : $param['price'] * 100;
-                    $update[$key]['quantity'] = $param['quantity'] ?? 0;
-                } else {
-                    $create[$key] = $this->filled($param);
-                    $create[$key]['listing_id'] = $listing_id ?? $param['listing_id'];
-                    $create[$key]['price'] = $listing_id ? ($param['price'] ?? 0) : $param['price'] * 100;
-                    $create[$key]['quantity'] = $param['quantity'] ?? 0;
-                }
+        foreach ($data as $value) {
+            if (in_array($param['product_id'], $properties)) {
+                $update[] = $this->filled($param);
+                $update[$key]['price'] = $listing_id ? ($param['price'] ?? 0) : $param['price'] * 100;
+                $update[$key]['quantity'] = $param['quantity'] ?? 0;
+            } else {
+                $create[$key] = $this->filled($param);
+                $create[$key]['listing_id'] = $listing_id ?? $param['listing_id'];
+                $create[$key]['price'] = $listing_id ? ($param['price'] ?? 0) : $param['price'] * 100;
+                $create[$key]['quantity'] = $param['quantity'] ?? 0;
             }
         }
 

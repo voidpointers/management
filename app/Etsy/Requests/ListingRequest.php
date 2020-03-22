@@ -30,8 +30,11 @@ class ListingRequest
                         'listing_id' => $listing_id
                     ]
                 ]);
-                $vars[$key] = $temp['results']['products'];
-                $vars[$key]['listing_id'] = $listing_id;
+                $products = $temp['results']['products'];
+                foreach ($products as $key => $product) {
+                    $product['listing_id'] = $listing_id;
+                    $vars[] = $product;
+                }
             }
 
             // 存储到数据库
