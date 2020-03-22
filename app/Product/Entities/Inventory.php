@@ -21,14 +21,15 @@ class Inventory extends Model
 
     public function store($params)
     {
-        dd($params);
         $properties = self::whereIn('product_id', array_column($params, 'product_id'))
             ->pluck('product_id')
             ->all();
 
         $update = $create = [];
 
-        foreach ($data as $value) {
+        foreach ($params as $key => $param) {
+            $listing_id = $param['listing_id'] ?? 0;
+
             if (in_array($param['product_id'], $properties)) {
                 $update[] = $this->filled($param);
                 $update[$key]['price'] = $listing_id ? ($param['price'] ?? 0) : $param['price'] * 100;
