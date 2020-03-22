@@ -51,4 +51,10 @@ $api->version('v1', [
         $api->resource('messages', 'MessagesController');
         $api->resource('details', 'DetailsController');
     });
+    $api->group([
+        'namespace' => 'Api\Product\V1\Controllers',
+        'prefix' => 'product'
+    ], function ($api) {
+        $api->resource('listings', 'ListingsController');
+    });
 });

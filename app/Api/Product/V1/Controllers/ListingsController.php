@@ -41,7 +41,7 @@ class ListingsController extends Controller
         return $this->response->array(['msg' => 'success']);
     }
 
-    public function detail(Request $request)
+    public function show(Request $request)
     {
         $shop_id = $request->header('shop-id');
         $listing_ids = $request->input('listing_ids');
