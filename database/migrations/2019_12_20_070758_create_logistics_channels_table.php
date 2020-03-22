@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
-class CreateLogisticsProviderChannelsTable extends Migration
+class CreateLogisticsChannelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateLogisticsProviderChannelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('logistics_provider_channels', function (Blueprint $table) {
+        Schema::create('logistics_channels', function (Blueprint $table) {
             $table->increments('id');
             $table->mediumInteger('provider_id')->default(0)->comment('供应商ID');
             $table->string('code', 12)->default('')->comment('代码');
@@ -25,7 +25,7 @@ class CreateLogisticsProviderChannelsTable extends Migration
             $table->index('code', 'idx_code');
         });
 
-        DB::statement("ALTER TABLE `logistics_provider_channels` comment '物流商渠道'"); // 表注释
+        DB::statement("ALTER TABLE `logistics_channels` comment '物流商渠道'"); // 表注释
     }
 
     /**
@@ -35,6 +35,6 @@ class CreateLogisticsProviderChannelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('logistics_provider_channels');
+        Schema::dropIfExists('logistics_channels');
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
-namespace Logistics\Entities;
+namespace Common\Entities;
 
 use App\Model;
 
 class Channel extends Model
 {
-    protected $table = 'logistics_provider_channels';
+    protected $table = 'logistics_channels';
 
     public function provider()
     {

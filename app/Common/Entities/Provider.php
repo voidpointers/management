@@ -1,6 +1,6 @@
 <?php
 
-namespace Logistics\Entities;
+namespace Common\Entities;
 
 use App\Model;
 

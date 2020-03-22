@@ -1,24 +1,24 @@
 <?php
 
-namespace Api\Logistics\V1\Controllers;
+namespace Api\Common\V1\Controllers;
 
-use Api\Controller;
+use App\Controller;
 use Api\Logistics\V1\Transformers\ChannelTransformer;
+use Common\Entities\Channel;
 use Dingo\Api\Http\Request;
-use Logistics\Repositories\ChannelRepository;
 
 class ChannelsController extends Controller
 {
     protected $channelRepository;
 
-    public function __construct(ChannelRepository $channelRepository)
+    public function __construct(Channel $channel)
     {
-        $this->channelRepository = $channelRepository;
+        $this->channel = $channel;
     }
 
     public function lists(Request $request)
     {
-        $channels = $this->channelRepository->paginate($request->get('limit', 30));
+        $channels = $this->channel->paginate($request->get('limit', 30));
 
         return $this->response->paginator($channels, new ChannelTransformer);
     }

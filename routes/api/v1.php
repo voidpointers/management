@@ -27,20 +27,15 @@ $api->version('v1', [
         $api->post('logistics/create', 'LogisticsController@create');
     });
     $api->group([
-        'namespace' => 'Api\Logistics\V1\Controllers',
-        'prefix' => 'logistics',
-    ], function ($api) {
-        $api->get('provider/lists', 'ProvidersController@lists');
-        $api->get('channel/lists', 'ChannelsController@lists');
-    });
-    $api->group([
         'namespace' => 'Api\Common\V1\Controllers',
         'prefix' => 'common'
     ], function ($api) {
-        $api->get('country/lists', 'CountriesController@lists');
+        $api->resource('countries', 'CountriesController');
+        $api->resource('shops', 'ShopsController');
+        $api->resource('providers', 'ProvidersController');
+        $api->resource('channels', 'ChannelsController');
         $api->post('register', 'RegisterController@register');
         $api->post('login', 'AuthorizationsController@login');
-        $api->resource('shops', 'ShopsController');
         $api->post('upload', 'FilesController@fileUpload');
     });
     $api->group([
