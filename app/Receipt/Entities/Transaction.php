@@ -41,6 +41,7 @@ class Transaction extends Model
         foreach ($params as $param) {
             foreach ($param['Transactions'] as $key => $value) {
                 $data[] = [
+                    'receipt_sn' => $param['receipt_sn'],
                     'receipt_id' => $param['receipt_id'],
                     'title' => $value['title'],
                     'transaction_id' => $value['transaction_id'],

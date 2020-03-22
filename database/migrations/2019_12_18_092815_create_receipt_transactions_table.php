@@ -16,6 +16,7 @@ class CreateReceiptTransactionsTable extends Migration
     {
         Schema::create('receipt_transactions', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('receipt_sn')->unsigned()->default(0)->comment('订单号');
             $table->bigInteger('receipt_id')->unsigned()->default(0)->comment('Etsy收据ID');
             $table->bigInteger('transaction_id')->unsigned()->default(0)->comment('交易ID');
             $table->bigInteger('listing_id')->unsigned()->default(0)->comment('商品ID');

@@ -23,6 +23,13 @@ if (!function_exists('generate_unique_id')) {
     }
 }
 
+if (!function_exists('generate_uniqid')) {
+    function generate_uniqid()
+    {
+        return substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
+    }
+}
+
 if (!function_exists('get_last_sql')) {
     /**
      * 获取最近一次执行的指令

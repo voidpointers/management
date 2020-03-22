@@ -9,6 +9,8 @@ class Consignee extends Model
     protected $table = 'receipt_consignees';
 
     protected $fillable = [
+        'receipt_sn',
+        'receipt_id',
         'country_id',
         'country_code',
         'country',
@@ -29,7 +31,6 @@ class Consignee extends Model
             foreach ($this->fillable as $fillable) {
                 $data[$key][$fillable] = $param[$fillable] ?? '';
             }
-            $data[$key]['receipt_id'] = $param['receipt_id'];
         }
 
         self::insert($data);

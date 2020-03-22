@@ -16,6 +16,7 @@ class CreateReceiptConsigneesTable extends Migration
     {
         Schema::create('receipt_consignees', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('receipt_sn')->unsigned()->default(0)->comment('订单号');
             $table->bigInteger('receipt_id')->unsigned()->default(0)->comment('Etsy收据ID');
             $table->integer('country_id')->unsigned()->default(0)->comment('国家ID');
             $table->string('country_code', 2)->default('')->comment('国家代号');

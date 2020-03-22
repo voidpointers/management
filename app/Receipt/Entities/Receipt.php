@@ -13,7 +13,7 @@ use Package\Entities\Logistics;
 class Receipt extends Model
 {
     protected $fillable = [
-        'receipt_id', 'shop_id', 'type', 'order_id', 'seller_user_id', 'buyer_user_id',
+        'receipt_sn', 'receipt_id', 'shop_id', 'type', 'order_id', 'seller_user_id', 'buyer_user_id',
         'buyer_email', 'status', 'package_sn', 'payment_method',
         'total_price', 'subtotal', 'grandtotal', 'adjusted_grandtotal', 'total_tax_cost',
         'total_vat_cost', 'total_shipping_cost', 'seller_msg', 'buyer_msg', 'buyer_msg_zh',
