@@ -47,7 +47,7 @@ class ListingsController extends Controller
         return $this->response->array(['msg' => 'success']);
     }
 
-    public function show($listing_id, Request $request)
+    public function show($listing_id)
     {
         $data = Listing::where('listing_id', $listing_id)
         ->with(['images'])
