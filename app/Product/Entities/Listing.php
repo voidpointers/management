@@ -3,9 +3,12 @@
 namespace Product\Entities;
 
 use App\Model;
+use Product\Filters\ListingFilter;
 
 class Listing extends Model
 {
+    use ListingFilter;
+
     protected $table = 'listings';
 
     protected $appends = ['state_str'];
@@ -49,16 +52,12 @@ class Listing extends Model
 
     public function store($params)
     {
-        $shop_id = shop_id();
-
         $listing_ids = self::whereIn('listing_id', array_column($params, 'listing_id'))
         ->pluck('listing_id')
         ->all();
 
         $update = $create = [];
         foreach ($params as $key => $param) {
-            $param['shop_id'] = $shop_id;
-
             if (in_array($param['listing_id'], $listing_ids)) {
                 $update[] = $this->filled($param);
             } else {
@@ -80,7 +79,8 @@ class Listing extends Model
     protected function filled($params)
     {
         $data = [
-            'update_time' => time()
+            'update_time' => time(),
+            'shop_id' => shop_id()
         ];
         foreach ($params as $key => $param) {
             if ('Images' == $key) {

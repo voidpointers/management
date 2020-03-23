@@ -13,22 +13,30 @@ class ListingsController extends Controller
 {
     protected $listingRequest;
 
-    public function __construct(ListingRequest $listingRequest)
+    public function __construct(
+        Listing $listing,
+        ListingRequest $listingRequest)
     {
+        $this->listing = $listing;
         $this->listingRequest = $listingRequest;
     }
     
     public function index(Request $request)
     {
-        $shop_id = $request->header('shop-id');
+        $query = $this->listing->apply($request)
+        ->where(['shop_id' => shop_id()]);
 
-        $data = Listing::where(['shop_id' => $shop_id])
-        ->orderBy('id', 'desc')
+        $transfomer = ListingTransformer::class;
+        if ('all' == $request->get('query')) {
+            $query->with(['images']);
+            $transfomer = DetailTransformer::class;
+        }
+
+        $data = $query->orderBy('id', 'desc')
         ->paginate($request->get('limit', 30));
 
         return $this->response->paginator(
-            $data,
-            ListingTransformer::class
+            $data, $transfomer
         );
     }
 
@@ -39,13 +47,9 @@ class ListingsController extends Controller
         return $this->response->array(['msg' => 'success']);
     }
 
-    public function show(Request $request)
+    public function show($listing_id, Request $request)
     {
-        $shop_id = $request->header('shop-id');
-        $listing_ids = $request->input('listing_ids');
-
-        $data = Listing::where(['shop_id' => $shop_id])
-        ->whereIn('listing_id', explode(',', $listing_ids))
+        $data = Listing::where('listing_id', $listing_id)
         ->with(['images'])
         ->get();
 
@@ -57,7 +61,6 @@ class ListingsController extends Controller
 
     public function update(Request $request)
     {
-        $shop_id = $request->header('shop-id');
         $params = $request->json();
 
         foreach ($params as $param) {
@@ -65,7 +68,7 @@ class ListingsController extends Controller
                 continue;
             }
         }
-        (new Listing)->store($shop_id, $params->all());
+        (new Listing)->store($params->all());
 
         return $this->response->array(['msg' => 'success']);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Message\V1\Controllers;
+namespace Api\Customer\V1\Controllers;
 
 use App\Controller;
 

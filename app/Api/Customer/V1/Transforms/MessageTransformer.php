@@ -1,10 +1,9 @@
 <?php
 
-namespace Api\Message\V1\Transforms;
+namespace Api\Customer\V1\Transforms;
 
-use Api\User\V1\Transforms\UserTransformer;
 use League\Fractal\TransformerAbstract;
-use Message\Entities\Message;
+use Customer\Entities\Message;
 
 class MessageTransformer extends TransformerAbstract
 {
@@ -19,7 +18,7 @@ class MessageTransformer extends TransformerAbstract
     {
         return $this->item(
             $message->user ?? null,
-            new UserTransformer,
+            new CustomerTransformer,
             'include'
         );
     }

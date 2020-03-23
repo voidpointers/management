@@ -28,17 +28,10 @@ class Inventory extends Model
         $update = $create = [];
 
         foreach ($params as $key => $param) {
-            $listing_id = $param['listing_id'] ?? 0;
-
             if (in_array($param['product_id'], $properties)) {
-                $update[] = $this->filled($param);
-                $update[$key]['price'] = $listing_id ? ($param['price'] ?? 0) : $param['price'] * 100;
-                $update[$key]['quantity'] = $param['quantity'] ?? 0;
+                $update[$key] = $this->filled($param);
             } else {
                 $create[$key] = $this->filled($param);
-                $create[$key]['listing_id'] = $listing_id ?? $param['listing_id'];
-                $create[$key]['price'] = $listing_id ? ($param['price'] ?? 0) : $param['price'] * 100;
-                $create[$key]['quantity'] = $param['quantity'] ?? 0;
             }
         }
 
@@ -54,20 +47,9 @@ class Inventory extends Model
 
     protected function filled($params)
     {
-        foreach ($params as $key => $param) {
-            if ($key == 'property_values') {
-                foreach ($param as $item) {
-                    $data['properties'][] = ['property_name' => $item['property_name'], 'scale_id' => $item['scale_id'], 'scale_name' => $item['scale_name'], 'values' => $item['values'][0]];
-                }
-                $data['properties'] = isset($data['properties']) ? json_encode($data['properties']) : json_encode(null);
-                continue;
-            } elseif ($key == 'offerings') {
-                $data['price'] = $param[0]['price']['amount'];
-                $data['quantity'] = $param[0]['quantity'];
-                $data['is_enabled'] = $param[0]['is_enabled'] ?? 0;
-                continue;
-            }
+        $data = [];
 
+        foreach ($params as $key => $param) {
             if (is_bool($param)) { // bool类型转换为int类型
                 $param = (int) $param;
             }
@@ -75,9 +57,6 @@ class Inventory extends Model
                 $param = json_encode($param);
             }
             if (in_array($key, $this->fillable)) {
-                $data[$key] = $param;
-            }
-            if ($key == 'properties') {
                 $data[$key] = $param;
             }
         }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Api\Message\V1\Controllers;
+namespace Api\Customer\V1\Controllers;
 
-use Api\Message\V1\Requests\ConversationIdRequest;
-use Api\Message\V1\Transforms\DraftTransformer;
+use Api\Customer\V1\Requests\ConversationIdRequest;
+use Api\Customer\V1\Transforms\DraftTransformer;
 use App\Controller;
 use Dingo\Api\Http\Request;
 use Etsy\Requests\ConversationRequest;
@@ -32,7 +32,6 @@ class DraftsController extends Controller
 
     public function store(ConversationIdRequest $request)
     {
-        $shop_id = $request->header('shop_id');
         $conversation_id = $request->input('conversation_id', 0);
         $message = $request->post('message', '');
         if (1 > strlen($message)) {
@@ -46,14 +45,14 @@ class DraftsController extends Controller
 
         // 存储消息
         $draft = Draft::updateOrCreate(
-            ['shop_id' => $shop_id, 'conversation_id' => $conversation_id, 'status' => 1],
+            ['shop_id' => shop_id(), 'conversation_id' => $conversation_id, 'status' => 1],
             ['message' => $message, 'sender_id' => 125136382, 'images' => '[]']
         );
 
         // 消息更新为已读
         Message::where([
             'conversation_id' => $conversation_id,
-            'shop_id' => $shop_id
+            'shop_id' => shop_id()
         ])->update(['is_unread' => 0]);
 
         return $this->response->item($draft, new DraftTransformer);

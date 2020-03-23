@@ -6,50 +6,45 @@ use App\Controller;
 use Api\Package\V1\Transforms\PackageTransformer;
 use Dingo\Api\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Package\Repositories\PackageRepository;
-use Package\Services\PackageService;
-use Receipt\Services\ReceiptService;
-use Receipt\Services\StateMachine as ReceiptStateMachine;
+use Order\Entities\Receipt;
+use Package\Entities\Package;
 use Package\Services\StateMachine as PackageStateMachine;
+use Order\Services\StateMachine as OrderStateMachine;
 
 class PackagesController extends Controller
 {
-    protected $repository;
+    protected $receipt;
 
-    protected $receiptService;
+    protected $package;
 
-    protected $packageService;
-
-    protected $receiptStateMachine;
+    protected $orderStateMachine;
 
     protected $packageStateMachine;
 
     public function __construct(
-        PackageRepository $repository,
-        ReceiptService $receiptService,
-        PackageService $packageService,
-        ReceiptStateMachine $receiptStateMachine,
+        Receipt $receipt,
+        Package $package,
+        OrderStateMachine $orderStateMachine,
         PackageStateMachine $packageStateMachine)
     {
-        $this->repository = $repository;
-        $this->receiptService = $receiptService;
-        $this->packageService = $packageService;
-        $this->receiptStateMachine = $receiptStateMachine;
+        $this->receipt = $receipt;
+        $this->package = $package;
+        $this->orderStateMachine = $orderStateMachine;
         $this->packageStateMachine = $packageStateMachine;
     }
 
     /**
      * 包裹列表
      */
-    public function lists(Request $request)
+    public function index(Request $request)
     {
-        $packages = $this->repository->apply($request)
-            ->with(['consignee', 'logistics', 'item' => function ($query) {
-                    return $query->with('transaction');
-                }
-            ])
-            ->orderBy('id', 'desc')
-            ->paginate($request->get('limit', 30));
+        $packages = $this->package->apply($request)
+        ->with(['consignee', 'logistics', 'item' => function ($query) {
+                return $query->with('transaction');
+            }
+        ])
+        ->orderBy('id', 'desc')
+        ->paginate($request->get('limit', 30));
 
         return $this->response->paginator($packages, new PackageTransformer);
     }
@@ -57,7 +52,7 @@ class PackagesController extends Controller
     /**
      * 打包
      */
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $receipt_ids = $request->input('receipt_id', '');
         if (!$receipt_ids) {
@@ -66,10 +61,9 @@ class PackagesController extends Controller
         $receipt_ids = json_decode($receipt_ids);
 
         // 获取订单列表
-        $receipts = $this->receiptService->lists([
-            'in' => ['id' => $receipt_ids],
-            'where' => ['status' => 1]
-        ]);
+        $receipts = $this->receipt->where(['status' => 1])
+        ->whereIn('id', $receipt_ids)
+        ->get();
         if ($receipts->isEmpty()) {
             return $this->response->error('订单不存在或状态不正确', 500);
         }
@@ -79,13 +73,13 @@ class PackagesController extends Controller
         DB::beginTransaction();
 
         // 更改订单状态
-        if (!$this->receiptStateMachine->operation('packup', ['id' => $receipt_ids])) {
+        if (!$this->orderStateMachine->operation('packup', ['id' => $receipt_ids])) {
             DB::rollBack();
             return $this->response->error('订单状态更改失败', 500);
         }
 
         // 生成包裹
-        $items = $this->packageService->create($receipts);
+        $items = $this->package->store($receipts);
         if (!$items) {
             DB::rollBack();
             return $this->response->error('包裹生成失败', 500);
@@ -101,7 +95,7 @@ class PackagesController extends Controller
         }
 
         // 关联package_sn到receipt主表
-        if (!$this->receiptService->updateReceipt($data, 'receipt_sn', 'receipt_sn')) {
+        if (!$this->receipt->updateBatch($data, 'receipt_sn', 'receipt_sn')) {
             DB::rollBack();
             return $this->response->error('更新订单失败', 500);
         }

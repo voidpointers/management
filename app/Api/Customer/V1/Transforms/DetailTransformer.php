@@ -1,10 +1,10 @@
 <?php
 
-namespace Api\Message\V1\Transforms;
+namespace Api\Customer\V1\Transforms;
 
 use Api\User\V1\Transforms\UserTransformer;
 use League\Fractal\TransformerAbstract;
-use Message\Entities\Detail;
+use Customer\Entities\Detail;
 
 class DetailTransformer extends TransformerAbstract
 {

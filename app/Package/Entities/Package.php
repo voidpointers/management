@@ -52,4 +52,38 @@ class Package extends Model
     {
         return $query->whereBetween('create_time', $create_time);
     }
+
+    public function store($receipts)
+    {
+        $packages = $items = [];
+
+        foreach ($receipts as $receipt) {
+            $package_sn = generate_package_sn();
+            $packages[] = [
+                'package_sn' => $package_sn,
+                'receipt_sn' => $receipt->receipt_sn,
+                'receipt_id' => $receipt->receipt_id,
+                'status' => self::STATUS['new'],
+                'create_time' => time(),
+                'update_time' => time(),
+            ];
+            foreach ($receipt->transaction as $value) {
+                $items[] = [
+                    'package_sn' => $package_sn,
+                    'receipt_id' => $receipt->receipt_id,
+                    'receipt_sn' => $receipt->receipt_sn,
+                    'transaction_sn' => $value->id,
+                    'title' => '桌游用品',
+                    'en' => 'Table Game',
+                    'price' => $value->price,
+                    'weight' => '0.198',
+                    'quantity' => $value->quantity,
+                ];
+            }
+        }
+        Package::insert($packages);
+        Item::insert($items);
+
+        return $items;
+    }
 }

@@ -6,7 +6,7 @@ $api->version('v1', [
         // 'middleware' => 'api.auth'
 ], function ($api) {
     $api->group([
-        'namespace' => 'Api\Receipt\V1\Controllers',
+        'namespace' => 'Api\Order\V1\Controllers',
         'prefix' => 'order',
     ], function ($api) {
         $api->resource('receipts', 'ReceiptsController');
@@ -15,16 +15,17 @@ $api->version('v1', [
         $api->post('close', 'ReceiptsController@close');
         $api->get('sales/export', 'SalesController@export');
         $api->post('transaction/{receipt_sn}/create', 'TransactionsController@create');
-        $api->post('consignee/{receipt_sn}/update', 'ConsigneesController@update');
+        $api->resource('consignees', 'ConsigneesController');
     });
     $api->group([
         'namespace' => 'Api\Package\V1\Controllers',
+        'prefix' => 'package'
     ], function ($api) {
+        $api->resource('logistics', 'LogisticsController');
         $api->resource('packages', 'PackagesController');
         $api->post('dispatch', 'PackagesController@delivery');
         $api->post('print', 'LogisticsController@labels');
         $api->get('tracking/info/{order_number}', 'LogisticsController@trackInfo');
-        $api->post('logistics/create', 'LogisticsController@create');
     });
     $api->group([
         'namespace' => 'Api\Common\V1\Controllers',
@@ -49,7 +50,8 @@ $api->version('v1', [
         'prefix' => 'customer'
     ], function ($api) {
         $api->resource('messages', 'MessagesController');
-        $api->resource('details', 'DetailsController');
+        $api->post('drafts/approve', 'DraftsController@approve');
+        $api->resource('drafts', 'DraftsController');
     });
     $api->group([
         'namespace' => 'Api\Product\V1\Controllers',

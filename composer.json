@@ -28,7 +28,7 @@
         "psr-4": {
             "App\\": "app/",
             "Api\\": "app/Api",
-            "Receipt\\": "app/Receipt",
+            "Order\\": "app/Order",
             "Voidpointers\\Yunexpress\\": "packages/voidpointers/yunexpress/src",
             "Voidpointers\\Etsy\\": "packages/voidpointers/etsy/src",
             "Logistics\\": "app/Logistics",

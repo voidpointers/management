@@ -2,7 +2,7 @@
 
 namespace Api\Customer\V1\Controllers;
 
-use Api\Message\V1\Transforms\MessageTransformer;
+use Api\Customer\V1\Transforms\MessageTransformer;
 use App\Controller;
 use Dingo\Api\Http\Request;
 use Customer\Entities\Message;

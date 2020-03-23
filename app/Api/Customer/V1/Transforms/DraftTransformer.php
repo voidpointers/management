@@ -1,9 +1,9 @@
 <?php
 
-namespace Api\Message\V1\Transforms;
+namespace Api\Customer\V1\Transforms;
 
 use League\Fractal\TransformerAbstract;
-use Message\Entities\Draft;
+use Customer\Entities\Draft;
 
 class DraftTransformer extends TransformerAbstract
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Message\V1\Requests;
+namespace Api\Customer\V1\Requests;
 
 use App\FormRequest;
 
