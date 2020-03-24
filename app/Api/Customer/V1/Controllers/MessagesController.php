@@ -32,7 +32,7 @@ class MessagesController extends Controller
         );
     }
 
-    public function show($conversation_id, Request $request)
+    public function show(Request $request, $conversation_id)
     {
         $messages = Detail::with(['user'])
         ->where('conversation_id', (int) $conversation_id)
