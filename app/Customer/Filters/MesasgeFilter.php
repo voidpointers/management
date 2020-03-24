@@ -15,7 +15,7 @@ trait MessageFilter
     
     public function convoId($params)
     {
-        return $this->builder->where('convesation_id', $params);
+        return $this->builder->where('conversation_id', $params);
     }
     
     public function receiptId($params)
