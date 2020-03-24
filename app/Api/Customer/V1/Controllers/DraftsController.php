@@ -20,7 +20,7 @@ class DraftsController extends Controller
         $this->conversationRequest = $conversationRequest;
     }
 
-    public function show($conversation_id, Request $request)
+    public function show(Request $request, $conversation_id)
     {
         $message = $this->info($conversation_id, [1, 2]);
 

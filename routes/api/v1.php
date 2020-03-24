@@ -50,8 +50,8 @@ $api->version('v1', [
         'prefix' => 'customer'
     ], function ($api) {
         $api->resource('messages', 'MessagesController');
-        $api->post('drafts/approve', 'DraftsController@approve');
         $api->resource('drafts', 'DraftsController');
+        $api->post('drafts/approve', 'DraftsController@approve');
     });
     $api->group([
         'namespace' => 'Api\Product\V1\Controllers',

@@ -6,6 +6,8 @@ use App\Model;
 
 class Detail extends Model
 {
+    protected $table = 'message_details';
+
     protected $appends = ['is_me'];
 
     public const CREATED_AT = null;

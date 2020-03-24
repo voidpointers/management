@@ -10,6 +10,8 @@ git clone https://email:password@gitee.com/hiywy/ywysys_back_v2.git
 
 ### 安装composer扩展包
 
+> composer安装教程：https://www.phpcomposer.com/
+
 ```shell
 composer install
 ```

@@ -2,8 +2,10 @@
 
 namespace Api\Customer\V1\Controllers;
 
+use Api\Customer\V1\Transforms\DetailTransformer;
 use Api\Customer\V1\Transforms\MessageTransformer;
 use App\Controller;
+use Customer\Entities\Detail;
 use Dingo\Api\Http\Request;
 use Customer\Entities\Message;
 
@@ -28,6 +30,18 @@ class MessagesController extends Controller
             $data,
             new MessageTransformer
         );
+    }
+
+    public function show($conversation_id, Request $request)
+    {
+        $messages = Detail::with(['user'])
+        ->where('conversation_id', (int) $conversation_id)
+        ->paginate((int) $request->get('limit', 200));
+
+        return $this->response->paginator(
+            $messages,
+            new DetailTransformer
+        )->addMeta('aggregates', ['order' => 1, 'mail' => 100]);
     }
 
     public function history(int $conversation_id, Request $request)
