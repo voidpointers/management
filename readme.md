@@ -6,14 +6,18 @@
 git clone https://email:password@gitee.com/hiywy/ywysys_back_v2.git
 ```
 
-## 安装composer扩展包
+## 初始化
+
+### 安装composer扩展包
 
 ```shell
 composer install
 ```
 
-## 配置DEV文件
-```
+### 配置DEV文件
+
+```php
+
 cp .env.example .env
 
 # 配置数据库
@@ -24,16 +28,44 @@ DB_DATABASE=ywysys
 DB_USERNAME=root
 DB_PASSWORD=password
 
-# 配置API域名
-API_DOMAIN=http://pre.api.createos.xyz
+# 配置API域名(二选一)
+API_DOMAIN=
+# 或使用ip+端口使用(二选一)
+API_PREFIX=
+
+# 配置云途物流
+YT_HOST=
+YT_APP_KEY=
+YT_APP_SECRET=
 
 ```
 
-## 生成JWT SECRET
+### 生成JWT SECRET
+
 > 管理员登录令牌
 
 ```shell
 php artisan jwt:secret
+```
+
+### 执行迁移文件，生成数据库
+
+```shell
+php artisan migrate
+```
+
+### 拉取订单
+
+> 可根据需要做成定时任务，一分钟执行一次
+
+```shell
+php artisan receipt:pull page --shop=16407439
+```
+
+### 初始化国家数据
+
+```shell
+php artisan country:pull
 ```
 
 ## 配置WebServer（以Nginx为例）
@@ -79,14 +111,3 @@ server
 
 > 配置完需要reload nginx
 
-## 执行迁移文件，生成数据库
-
-```shell
-php artisan migrate
-```
-
-## 执行订单拉取任务
-
-```shell
-php artisan receipt:pull page --shop=16407439
-```
