@@ -42,7 +42,6 @@ class ListingRequest
             (new Image)->store($data);
             (new Inventory)->store($vars);
 
-            echo "当前处理页数: " . $page . PHP_EOL;
             // 最后一页为null，退出循环
             $page = $listings['pagination']['next_page'];
             usleep(100);

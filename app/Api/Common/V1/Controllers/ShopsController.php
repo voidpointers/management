@@ -18,9 +18,11 @@ class ShopsController extends Controller
             $columns = ['shop_id', 'shop_name', 'user_id', 'username', 'icon'];
         }
 
-        $data = Shop::where(['status' => 1])->get($columns);
+        $data = Shop::where(['status' => 1])
+        ->select($columns)
+        ->paginate($request->get('limit', 30));
 
-        return $this->response->collection(
+        return $this->response->paginator(
             $data,
             ShopTransformer::class
         );

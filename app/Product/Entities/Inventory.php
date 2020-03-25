@@ -13,8 +13,9 @@ class Inventory extends Model
     protected $fillable = [
         'product_id',
         'sku',
+        'price',
+        'quantity',
         'properties',
-        'offerings',
         'is_deleted',
         "is_enabled"
     ];
@@ -50,6 +51,23 @@ class Inventory extends Model
         $data = [];
 
         foreach ($params as $key => $param) {
+            if ('property_values' == $key) {
+                $properties = [];
+                foreach ($param as $item) {
+                    $properties[] = [
+                        'property_name' => $item['property_name'],
+                        'scale_name' => $item['scale_name'],
+                        'values' => $item['values'][0]
+                    ];
+                }
+                $param['properties'] = json_encode($properties);
+            }
+            if ('offerings' == $key) {
+                $param['quantity'] = $param[0]['quantity'];
+                $param['price'] = $param[0]['price']['amount'];
+                $param['is_enabled'] = $param[0]['is_enabled'] ?? 0;
+            }
+
             if (is_bool($param)) { // bool类型转换为int类型
                 $param = (int) $param;
             }
