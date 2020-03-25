@@ -3,7 +3,7 @@
 namespace Etsy\Requests;
 
 use Voidpointers\Etsy\Facades\Etsy;
-use Receipt\Entities\Receipt;
+use Order\Entities\Receipt;
 
 class ReceiptRequest
 {

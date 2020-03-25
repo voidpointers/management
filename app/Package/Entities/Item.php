@@ -3,7 +3,7 @@
 namespace Package\Entities;
 
 use App\Model;
-use Receipt\Entities\Transaction;
+use Order\Entities\Transaction;
 
 class Item extends Model
 {
