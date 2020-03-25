@@ -61,7 +61,7 @@ class Package extends Model
         $packages = $items = [];
 
         foreach ($receipts as $receipt) {
-            $package_sn = generate_package_sn();
+            $package_sn = generate_uniqid();
             $packages[] = [
                 'package_sn' => $package_sn,
                 'receipt_sn' => $receipt->receipt_sn,
