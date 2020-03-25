@@ -66,7 +66,7 @@ class Package extends Model
                 'package_sn' => $package_sn,
                 'receipt_sn' => $receipt->receipt_sn,
                 'receipt_id' => $receipt->receipt_id,
-                'status' => self::STATUS['new'],
+                'status' => 1,
                 'create_time' => time(),
                 'update_time' => time(),
             ];
