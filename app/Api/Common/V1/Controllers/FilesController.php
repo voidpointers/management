@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class FilesController extends Controller
 {
-    public function fileUpload(Request $request)
+    public function upload(Request $request)
     {
         if (!$request->hasFile('picture')) {
             return $this->response->error('请选择要上传的文件', 500);

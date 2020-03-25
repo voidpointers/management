@@ -35,9 +35,10 @@ $api->version('v1', [
         $api->resource('shops', 'ShopsController');
         $api->resource('providers', 'ProvidersController');
         $api->resource('channels', 'ChannelsController');
-        $api->post('register', 'RegisterController@register');
-        $api->post('login', 'AuthorizationsController@login');
-        $api->post('upload', 'FilesController@fileUpload');
+        $api->post('upload', 'FilesController@upload');
+        $api->post('register', 'UsersController@register');
+        $api->post('login', 'UsersController@login');
+        $api->get('redirect', 'AuthController@redirect');
     });
     $api->group([
         'namespace' => 'Api\Etsy\V1\Controllers',

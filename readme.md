@@ -98,6 +98,11 @@ server
 
   root /www/pre/ywysys_back_v2/public;
 
+  # 配置图片URL
+  location /images {
+    root /www/pre/ywysys_back_v2/storage/app/public;
+  }
+
   location ~ .*\.(php|php5)?$
   {
     fastcgi_pass  php:9000;
@@ -113,3 +118,6 @@ server
 
 > 配置完需要reload nginx
 
+### 图片上传权限
+
+chmod -R 777 storage/app

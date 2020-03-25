@@ -16,13 +16,17 @@ trait QueryFilter
 
         foreach ($request->all() as $name => $value) {
             $name = camelize($name, '_');
+            $filter = array_filter([$value], function ($item) {
+                if ('' === $item || null === $item) {
+                    return false;
+                }
+                return true;
+            });
+            if (!$filter) {
+                continue;
+            }
             if (method_exists($this, $name)) {
-                call_user_func_array([$this, $name], array_filter([$value], function ($item) {
-                    if ('' === $item || null === $item) {
-                        return false;
-                    }
-                    return true;
-                }));
+                call_user_func_array([$this, $name], $filter);
             }
         }
 
