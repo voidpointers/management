@@ -2,7 +2,7 @@
 
 namespace Api\Receipt\V1\Requests;
 
-use Api\FormRequest;
+use App\FormRequest;
 
 class ConsigneeRequest extends FormRequest
 {

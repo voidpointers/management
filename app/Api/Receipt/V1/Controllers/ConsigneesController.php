@@ -2,25 +2,17 @@
 
 namespace Api\Receipt\V1\Controllers;
 
-use Api\Controller;
+use App\Controller;
 use Api\Receipt\V1\Requests\ConsigneeRequest;
-use Dingo\Api\Http\Request;
-use Receipt\Entities\Consignee;
-use Receipt\Repositories\ConsigneeRepository;
-use System\Repositories\CountryRepository;
+use Order\Entities\Consignee;
 
 class ConsigneesController extends Controller
 {
-    protected $consigneeRepository;
+    protected $consignee;
 
-    protected $countryRepository;
-
-    public function __construct(
-        ConsigneeRepository $consigneeRepository,
-        CountryRepository $countryRepository)
+    public function __construct(Consignee $consignee)
     {
-        $this->consigneeRepository = $consigneeRepository;
-        $this->countryRepository = $countryRepository;
+        $this->consignee = $consignee;
     }
 
     public function update(ConsigneeRequest $request, $receipt_sn)
@@ -30,9 +22,7 @@ class ConsigneesController extends Controller
             return $this->response->error('缺少必要参数', 500);
         }
 
-        $this->consigneeRepository->updateWhere(
-            ['receipt_sn' => $receipt_sn], $validated
-        );
+        $this->consignee->where(['receipt_sn' => $receipt_sn])->update($validated);
 
         return $this->response->array(['msg' => 'success']);
     }

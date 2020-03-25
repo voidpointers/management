@@ -17,6 +17,7 @@ class CreatePackagesTable extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('package_sn')->unsigned()->default(0)->comment('包裹编号');
+            $table->bigInteger('receipt_sn')->unsigned()->default(0)->comment('订单编号');
             $table->bigInteger('receipt_id')->unsigned()->default(0)->comment('Etsy订单ID');
             $table->tinyInteger('status')->default(0)->comment('状态');
             $table->integer('create_time')->default(0)->comment('创建时间');
