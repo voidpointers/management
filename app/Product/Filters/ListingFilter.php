@@ -8,7 +8,7 @@ trait ListingFilter
 {
     use QueryFilter;
 
-    public function listingId($params)
+    public function listingIds($params)
     {
         return $this->builder->whereIn('listing_id', explode(',', $params));
     }
