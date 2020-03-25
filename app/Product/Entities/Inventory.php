@@ -13,7 +13,7 @@ class Inventory extends Model
     protected $fillable = [
         'product_id',
         'sku',
-        'property_values',
+        'properties',
         'offerings',
         'is_deleted',
         "is_enabled"
