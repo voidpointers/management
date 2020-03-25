@@ -3,7 +3,7 @@
 namespace Api\Package\V1\Transforms;
 
 use League\Fractal\TransformerAbstract;
-use Receipt\Entities\Consignee;
+use Order\Entities\Consignee;
 
 class ConsigneeTransformer extends TransformerAbstract
 {

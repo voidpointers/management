@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Etsy\Requests\ReceiptRequest;
 use Illuminate\Console\Command;
-use Receipt\Entities\Consignee;
+use Order\Entities\Consignee;
 use Receipt\Entities\Receipt;
 use Receipt\Entities\Transaction;
 use Receipt\Services\ReceiptService;

@@ -4,7 +4,7 @@ namespace Package\Entities;
 
 use App\Model;
 use App\QueryFilter;
-use Receipt\Entities\Consignee;
+use Order\Entities\Consignee;
 
 class Package extends Model
 {
