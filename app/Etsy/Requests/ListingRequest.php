@@ -44,7 +44,6 @@ class ListingRequest
 
             // 最后一页为null，退出循环
             $page = $listings['pagination']['next_page'];
-            usleep(100);
         }
         return true;
     }
