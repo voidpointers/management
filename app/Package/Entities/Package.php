@@ -3,10 +3,13 @@
 namespace Package\Entities;
 
 use App\Model;
+use App\QueryFilter;
 use Receipt\Entities\Consignee;
 
 class Package extends Model
 {
+    use QueryFilter;
+
     protected $appends = ['status_str', 'shop_title'];
 
     protected const STATUS = [
