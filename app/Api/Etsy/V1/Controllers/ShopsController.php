@@ -8,7 +8,7 @@ use Voidpointers\Etsy\Facades\Etsy;
 
 class ShopsController extends Controller
 {
-    public function index($shop_id, Request $request)
+    public function index(Request $request)
     {
         return Etsy::getShop([
             'params' => $request->all(),
@@ -18,7 +18,7 @@ class ShopsController extends Controller
         ]);
     }
 
-    public function update($shop_id, Request $request)
+    public function update(Request $request)
     {
         return Etsy::updateShop([
             'params' => $request->all()

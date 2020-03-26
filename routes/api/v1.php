@@ -45,6 +45,7 @@ $api->version('v1', [
         'prefix' => 'etsy'
     ], function ($api) {
         $api->resource('receipts', 'ReceiptsController');
+        $api->resource('shops', 'ShopsController');
     });
     $api->group([
         'namespace' => 'Api\Customer\V1\Controllers',

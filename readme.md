@@ -121,3 +121,5 @@ server
 ### 图片上传权限
 
 chmod -R 777 storage/app
+
+### 初始化用户
