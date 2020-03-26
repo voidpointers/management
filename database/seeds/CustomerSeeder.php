@@ -12,7 +12,6 @@ class CustomerSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('customers')->truncate();
         $data = [
             [
                 'user_id' => 125136382,
@@ -24,6 +23,19 @@ class CustomerSeeder extends Seeder
                 'is_seller' => 1,
             ]
         ];
-        DB::table('customers')->insert($data);
+
+        $users = DB::table('customers')
+        ->whereIn('user_id', array_column($data, 'user_id'))
+        ->get()
+        ->pluck('user_id')
+        ->all();
+
+        $array = array_filter($data, function ($item) use ($users) {
+            if (in_array($item['user_id'], $users)) {
+                return false;
+            }
+            return true;
+        });
+        DB::table('customers')->insert($array);
     }
 }
