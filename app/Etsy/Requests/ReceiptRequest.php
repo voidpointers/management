@@ -38,14 +38,10 @@ class ReceiptRequest
             'receipt_id', array_keys($receipts)
         )->pluck('receipt_id')->all();
 
-        // 过滤已入库数据
-        $data = array_filter($receipts, function ($value) use ($temp) {
-            return !in_array($value, $temp);
-        });
-
         // 数据倒序排列
         $data = [];
-        foreach (array_reverse($data) as $id => $value) {
+        foreach (array_reverse($receipts) as $id => $value) {
+            // 过滤已存在数据
             if (in_array($id, $temp)) {
                 continue;
             }
