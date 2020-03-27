@@ -40,7 +40,7 @@ class ReceiptRequest
 
         // 数据倒序排列
         $data = [];
-        foreach (array_reverse($receipts) as $id => $value) {
+        foreach ($receipts as $id => $value) {
             // 过滤已存在数据
             if (in_array($id, $temp)) {
                 continue;
