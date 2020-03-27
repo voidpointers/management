@@ -53,7 +53,7 @@ $api->version('v1', [
     ], function ($api) {
         $api->resource('messages', 'MessagesController');
         $api->resource('drafts', 'DraftsController');
-        $api->post('drafts/approve', 'DraftsController@approve');
+        $api->post('conversations/draft/approve', 'DraftsController@approve');
     });
     $api->group([
         'namespace' => 'Api\Product\V1\Controllers',
