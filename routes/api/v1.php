@@ -56,7 +56,7 @@ $api->version('v1', [
         $api->post('drafts/approve', 'DraftsController@approve');
         $api->resource('drafts', 'DraftsController');
         $api->post('conversations/draft/approve', 'DraftsController@approve');
-        $api->resource('receipts/{convo_id}', 'ReceiptsController');
+        $api->resource('receipts', 'ReceiptsController');
     });
     $api->group([
         'namespace' => 'Api\Product\V1\Controllers',
