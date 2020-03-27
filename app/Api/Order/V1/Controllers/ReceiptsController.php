@@ -42,7 +42,7 @@ class ReceiptsController extends Controller
     {
         $receipts = $this->receipt->apply($request)
             ->with(['consignee', 'transaction', 'logistics'])
-            ->orderBy('modified_tsz', 'desc')
+            ->orderBy('creation_tsz', 'desc')
             ->paginate($request->get('limit', 30));
 
         return $this->response->paginator($receipts, new ReceiptTransformer);
