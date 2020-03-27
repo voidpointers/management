@@ -45,7 +45,7 @@ class MessagesController extends Controller
         )->addMeta('aggregates', ['order' => 1, 'mail' => 100]);
     }
 
-    public function history(int $conversation_id, Request $request)
+    public function history(Request $request, $conversation_id)
     {
         $message = Message::where('conversation_id', $conversation_id)->first();
         if (!$message) {
