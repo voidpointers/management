@@ -36,6 +36,7 @@ class MessagesController extends Controller
     {
         $messages = Detail::with(['user'])
         ->where('conversation_id', (int) $conversation_id)
+        ->orderBy('sort', 'asc')
         ->paginate((int) $request->get('limit', 200));
 
         return $this->response->paginator(
