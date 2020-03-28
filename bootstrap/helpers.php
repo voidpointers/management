@@ -127,7 +127,7 @@ if (!function_exists('set_shop')) {
 }
 
 if (!function_exists('get_shop')) {
-    function get_shop($shop_id)
+    function get_shop($shop_id = 0)
     {
         $shop = Cache::store('file')->get('shop_' . $shop_id);
         $shop = '';

@@ -17,7 +17,7 @@ class Shop extends Model
 
     public function store($params)
     {
-        $shop = get_shop($params['shop_id']);
+        $shop = get_shop();
 
         $data = [
             'shop_name' => $params['shop_name'],
