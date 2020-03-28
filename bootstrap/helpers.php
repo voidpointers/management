@@ -1,5 +1,6 @@
 <?php
 
+use Common\Entities\Shop;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
@@ -130,7 +131,7 @@ if (!function_exists('get_shop')) {
     {
         $shop = Cache::store('file')->get('shop');
         if (!$shop) {
-            $shop = DB::table('shops')->where('shop_id', $shop_id)->first()->all();
+            $shop = Shop::where('shop_id', $shop_id)->first()->toArray();
             Cache::store('file')->set('shop', $shop);
         }
         return $shop;
