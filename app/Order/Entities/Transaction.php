@@ -4,7 +4,7 @@ namespace Order\Entities;
 
 use App\Model;
 use Order\Entities\Receipt;
-use Receipt\Filters\TransactionFilter;
+use Order\Filters\TransactionFilter;
 
 class Transaction extends Model
 {
