@@ -45,8 +45,8 @@ class ReceiptsController extends Controller
      */
     public function index(Request $request)
     {
-        $receipts = $this->receipt->where(['shop_id' => shop_id()])
-        ->apply($request)
+        $receipts = $this->receipt->apply($request)
+        ->where(['shop_id' => shop_id()])
         ->with(['consignee', 'transaction', 'logistics'])
         ->orderBy('creation_tsz', 'desc')
         ->paginate($request->get('limit', 30));
@@ -121,8 +121,8 @@ class ReceiptsController extends Controller
      */
     public function export(Request $request, $type = 'receipt')
     {
-        $data = $this->transaction->where(['shop_id', shop_id()])
-        ->apply($request)
+        $data = $this->transaction->apply($request)
+        ->where(['shop_id', shop_id()])
         ->with(['consignee', 'receipt'])
         ->orderBy('id', 'desc')
         ->get();
