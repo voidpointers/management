@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function redirect(Request $request)
     {
-        set_shop($request->all());
+        set_shop([shop_id() => $request->all()]);
 
         return redirect(Etsy::authorize(env('ETSY_REDIRECT_URI')));
     }

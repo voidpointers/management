@@ -39,6 +39,6 @@ class Shop extends Model
             $data
         );
 
-        return set_shop($data);
+        return set_shop([$params['shop_id'] => $data]);
     }
 }

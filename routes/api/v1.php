@@ -38,8 +38,8 @@ $api->version('v1', [
         $api->post('upload', 'FilesController@upload');
         $api->post('register', 'UsersController@register');
         $api->post('login', 'UsersController@login');
-        $api->get('Auth/redirect', 'AuthController@redirect');
-        $api->get('Auth/approve', 'AuthController@approve');
+        $api->get('auth/redirect', 'AuthController@redirect');
+        $api->get('auth/approve', 'AuthController@approve');
     });
     $api->group([
         'namespace' => 'Api\Etsy\V1\Controllers',
