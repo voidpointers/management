@@ -106,7 +106,7 @@ if (!function_exists('custom_log')) {
 if (!function_exists('shop_id')) {
     function shop_id()
     {
-        return Cache::store('array')->get('shop_id');
+        return Cache::store('array')->get('shop_id') ?? 0;
     }
 }
 

@@ -23,7 +23,7 @@ class Shop extends Model
             'shop_name' => $params['shop_name'],
             'user_id' => $params['user_id'],
             'username' => $params['login_name'],
-            'title' => $params['title'],
+            'title' => $params['title'] ?? '',
             'currency_code' => $params['currency_code'],
             'url' => $params['url'],
             'image' => $params['image_url_760x100'],

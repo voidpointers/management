@@ -31,7 +31,7 @@ class AuthController extends Controller
             ]
         ]);
 
-        $data = $shop['results'];
+        $data = $shop['results'][0];
         $data['access_token'] = $credentials->getIdentifier();
         $data['access_secret'] = $credentials->getSecret();
 
