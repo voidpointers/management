@@ -143,6 +143,7 @@ class ReceiptsController extends Controller
 
     public function pull(Request $request)
     {
+        $request->offsetExists('shop_id', shop_id());
         $data = $this->receiptRequest->filters($request->all());
         if (empty($data)) {
             echo "订单列表为空" . PHP_EOL;
