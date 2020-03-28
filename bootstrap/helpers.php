@@ -131,7 +131,7 @@ if (!function_exists('get_shop')) {
     {
         $shop = Cache::store('file')->get('shop');
         if (!$shop) {
-            $shop = Shop::where('shop_id', $shop_id)->first()->toArray();
+            $shop = (array) DB::table('shops')->where('shop_id', $shop_id)->first();
             Cache::store('file')->set('shop', $shop);
         }
         return $shop;
