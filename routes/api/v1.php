@@ -13,6 +13,7 @@ $api->version('v1', [
         $api->get('export/{type}', 'ReceiptsController@export');
         $api->post('import', 'ReceiptsController@import');
         $api->post('close', 'ReceiptsController@close');
+        $api->get('pull', 'ReceiptsController@pull');
         $api->post('transaction/{receipt_sn}/create', 'TransactionsController@create');
         $api->resource('consignees', 'ConsigneesController');
     });

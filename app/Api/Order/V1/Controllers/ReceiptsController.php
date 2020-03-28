@@ -6,13 +6,14 @@ use App\Controller;
 use Api\Order\V1\Exports\ReceiptsExport;
 use Api\Order\V1\Exports\SalesExport;
 use Api\Order\V1\Imports\ReceiptImport;
-use Api\Order\V1\Requests\ReceiptRequest;
 use Api\Order\V1\Transforms\ReceiptTransformer;
 use Dingo\Api\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Order\Entities\Consignee;
 use Order\Entities\Receipt;
 use Order\Entities\Transaction;
 use Order\Services\StateMachine;
+use Etsy\Requests\ReceiptRequest;
 
 /**
  * 收据控制器
@@ -21,6 +22,8 @@ use Order\Services\StateMachine;
  */
 class ReceiptsController extends Controller
 {
+    protected $receiptRequest;
+
     protected $stateMachine;
 
     protected $receipt;
@@ -28,10 +31,12 @@ class ReceiptsController extends Controller
     protected $transaction;
 
     public function __construct(
+        ReceiptRequest $receiptRequest,
         Transaction $transaction,
         Receipt $receipt,
         StateMachine $stateMachine)
     {
+        $this->receiptRequest = $receiptRequest;
         $this->transaction = $transaction;
         $this->stateMachine = $stateMachine;
         $this->receipt = $receipt;
@@ -134,5 +139,19 @@ class ReceiptsController extends Controller
         }
 
         return Excel::download($export, 'receipts.xlsx');
+    }
+
+    public function pull(Request $request)
+    {
+        $data = $this->receiptRequest->filters($request->all());
+        if (empty($data)) {
+            echo "订单列表为空" . PHP_EOL;
+            return;
+        }
+
+        // 入库
+        (new Receipt())->store($data);
+        (new Transaction())->store($data);
+        (new Consignee())->store($data);
     }
 }
