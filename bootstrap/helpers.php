@@ -116,3 +116,23 @@ if (!function_exists('current_user')) {
         return (int) config('shops')[$shop_id]['user_id'];
     }
 }
+
+if (!function_exists('set_shop')) {
+    function set_shop($params)
+    {
+        Cache::store('file')->set('shop', $params);
+        return $params;
+    }
+}
+
+if (!function_exists('get_shop')) {
+    function get_shop($shop_id)
+    {
+        $shop = Cache::store('file')->get('shop');
+        if (!$shop) {
+            $shop = DB::table('shops')->where('shop_id', $shop_id)->firtst()->all();
+            Cache::store('file')->set('shop', $shop);
+        }
+        return $shop;
+    }
+}

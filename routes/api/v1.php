@@ -38,7 +38,8 @@ $api->version('v1', [
         $api->post('upload', 'FilesController@upload');
         $api->post('register', 'UsersController@register');
         $api->post('login', 'UsersController@login');
-        $api->get('redirect', 'AuthController@redirect');
+        $api->get('Auth/redirect', 'AuthController@redirect');
+        $api->get('Auth/approve', 'AuthController@approve');
     });
     $api->group([
         'namespace' => 'Api\Etsy\V1\Controllers',

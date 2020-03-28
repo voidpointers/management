@@ -21,6 +21,8 @@ class Server
      */
     public function __construct(array $config)
     {
+        $config = get_shop(shop_id());
+
         $this->server = new Etsy([
             'identifier' => $config['consumer_key'],
             'secret' => $config['consumer_secret'],
