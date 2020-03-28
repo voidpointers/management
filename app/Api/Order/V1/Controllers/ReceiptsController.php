@@ -4,6 +4,7 @@ namespace Api\Order\V1\Controllers;
 
 use App\Controller;
 use Api\Order\V1\Exports\ReceiptsExport;
+use Api\Order\V1\Exports\SalesExport;
 use Api\Order\V1\Imports\ReceiptImport;
 use Api\Order\V1\Requests\ReceiptRequest;
 use Api\Order\V1\Transforms\ReceiptTransformer;
@@ -113,12 +114,19 @@ class ReceiptsController extends Controller
      * 
      * @return
      */
-    public function export(Request $request)
+    public function export(Request $request, $type = 'receipt')
     {
-        $data = Transaction::with(['consignee', 'receipt'])
-            ->orderBy('id', 'desc')
-            ->get();
+        $data = Transaction::applay($request)
+        ->with(['consignee', 'receipt'])
+        ->orderBy('id', 'desc')
+        ->get();
         
-        return Excel::download(new ReceiptsExport($data), 'receipts.xlsx');
+        if ('receipt' == $type) {
+            $export = new ReceiptsExport($data);
+        } else {
+            $export = new SalesExport($data);
+        }
+
+        return Excel::download($export, 'receipts.xlsx');
     }
 }

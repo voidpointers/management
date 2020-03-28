@@ -4,9 +4,12 @@ namespace Order\Entities;
 
 use App\Model;
 use Order\Entities\Receipt;
+use Receipt\Filters\TransactionFilter;
 
 class Transaction extends Model
 {
+    use TransactionFilter;
+
     protected $table = 'receipt_transactions';
 
     public function receipt()

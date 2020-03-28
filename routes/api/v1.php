@@ -10,10 +10,9 @@ $api->version('v1', [
         'prefix' => 'order',
     ], function ($api) {
         $api->resource('receipts', 'ReceiptsController');
-        $api->get('export', 'ReceiptsController@export');
+        $api->get('export/{type}', 'ReceiptsController@export');
         $api->post('import', 'ReceiptsController@import');
         $api->post('close', 'ReceiptsController@close');
-        $api->get('sales/export', 'SalesController@export');
         $api->post('transaction/{receipt_sn}/create', 'TransactionsController@create');
         $api->resource('consignees', 'ConsigneesController');
     });
