@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Etsy\Requests\ReceiptRequest;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Order\Entities\Consignee;
 use Order\Entities\Receipt;
 use Order\Entities\Transaction;
@@ -49,6 +50,8 @@ class ReceiptPull extends Command
         $shop_id = $this->option('shop');
         $limit = $this->option('limit') ?? 5;
         $page = $this->option('page') ?? 1;
+
+        Cache::store('array')->put('shop_id', $shop_id);
 
         if ('page' == $this->argument('method')) {
             for ($i = $page; $i > 0; $i--) {
