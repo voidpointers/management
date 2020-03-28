@@ -130,7 +130,6 @@ if (!function_exists('get_shop')) {
     function get_shop($shop_id = 0)
     {
         $shop = Cache::store('file')->get('shop_' . $shop_id);
-        $shop = '';
         if (!$shop) {
             $shop = (array) DB::table('shops')->where('shop_id', $shop_id)->first();
             Cache::store('file')->set('shop_' . $shop_id, $shop);

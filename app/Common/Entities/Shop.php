@@ -26,7 +26,7 @@ class Shop extends Model
             'title' => $params['title'] ?? '',
             'currency_code' => $params['currency_code'],
             'url' => $params['url'],
-            'image' => $params['image_url_760x100'],
+            'image' => $params['image_url_760x100'] ?? '',
             'icon' => $params['icon_url_fullxfull'],
             'status' => 1,
             'consumer_secret' => $shop['consumer_secret'],
