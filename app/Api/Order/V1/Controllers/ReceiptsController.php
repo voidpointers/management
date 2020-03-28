@@ -25,10 +25,14 @@ class ReceiptsController extends Controller
 
     protected $receipt;
 
+    protected $transaction;
+
     public function __construct(
+        Transaction $transaction,
         Receipt $receipt,
         StateMachine $stateMachine)
     {
+        $this->transaction = $transaction;
         $this->stateMachine = $stateMachine;
         $this->receipt = $receipt;
     }
@@ -116,7 +120,7 @@ class ReceiptsController extends Controller
      */
     public function export(Request $request, $type = 'receipt')
     {
-        $data = Transaction::applay($request)
+        $data = $this->transaction->apply($request)
         ->with(['consignee', 'receipt'])
         ->orderBy('id', 'desc')
         ->get();
