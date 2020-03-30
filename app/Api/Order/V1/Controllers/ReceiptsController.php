@@ -78,7 +78,7 @@ class ReceiptsController extends Controller
     /**
      * 更新
      */
-    public function update($receipt_sn, ReceiptRequest $request)
+    public function update($receipt_sn, Request $request)
     {
         $validated = $request->validated();
         if (!$validated) {
@@ -154,5 +154,7 @@ class ReceiptsController extends Controller
         (new Receipt())->store($data);
         (new Transaction())->store($data);
         (new Consignee())->store($data);
+
+        return ['msg' => 'success'];
     }
 }
