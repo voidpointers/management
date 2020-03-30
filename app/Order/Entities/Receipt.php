@@ -3,7 +3,6 @@
 namespace Order\Entities;
 
 use App\Model;
-use Package\Entities\Logistics;
 use Order\Filters\ReceiptFilter;
 
 /**
@@ -41,17 +40,17 @@ class Receipt extends Model
 
     public function transaction()
     {
-        return $this->hasMany('Order\Entities\Transaction', 'receipt_sn', 'receipt_sn');
+        return $this->hasMany(Transaction::class, 'receipt_sn', 'receipt_sn');
     }
 
     public function consignee()
     {
-        return $this->hasOne('Order\Entities\Consignee', 'receipt_sn', 'receipt_sn');
+        return $this->hasOne(Consignee::class, 'receipt_sn', 'receipt_sn');
     }
 
     public function logistics()
     {
-        return $this->hasOne(Logistics::class, 'package_sn', 'package_sn');
+        return $this->hasOne(Logistics::class, 'receipt_sn', 'receipt_sn');
     }
 
     /**
