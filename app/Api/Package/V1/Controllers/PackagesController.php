@@ -54,26 +54,25 @@ class PackagesController extends Controller
      */
     public function store(Request $request)
     {
-        $receipt_ids = $request->input('receipt_id', '');
-        if (!$receipt_ids) {
+        $receipt_sn = $request->input('receipt_sn', '');
+        if (!$receipt_sn) {
             return $this->response->error('参数错误[receipt_id为空]', 500);
         }
-        $receipt_ids = json_decode($receipt_ids);
 
         // 获取订单列表
         $receipts = $this->receipt->where(['status' => 1])
-        ->whereIn('id', $receipt_ids)
+        ->whereIn('receipt_sn', $receipt_sn)
         ->get();
         if ($receipts->isEmpty()) {
             return $this->response->error('订单不存在或状态不正确', 500);
         }
 
-        $receipt_ids = $receipts->pluck('id')->toArray();
+        $receipt_sn = $receipts->pluck('receipt_sn')->toArray();
 
         DB::beginTransaction();
 
         // 更改订单状态
-        if (!$this->orderStateMachine->operation('packup', ['id' => $receipt_ids])) {
+        if (!$this->orderStateMachine->operation('packup', ['receipt_sn' => $receipt_sn])) {
             DB::rollBack();
             return $this->response->error('订单状态更改失败', 500);
         }
