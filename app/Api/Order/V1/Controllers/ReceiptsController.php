@@ -127,7 +127,9 @@ class ReceiptsController extends Controller
     public function export(Request $request, $type = 'receipt')
     {
         $data = $this->transaction->apply($request)
-        ->where(['shop_id' => shop_id()])
+        ->whereHas('receipt', function ($query) {
+            return $query->where(['shop_id' => shop_id()]);
+        })
         ->with(['consignee', 'receipt'])
         ->orderBy('id', 'desc')
         ->get();
