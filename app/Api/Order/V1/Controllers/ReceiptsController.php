@@ -127,7 +127,7 @@ class ReceiptsController extends Controller
     public function export(Request $request, $type = 'receipt')
     {
         $data = $this->transaction->apply($request)
-        ->where(['shop_id', shop_id()])
+        ->where(['shop_id' => shop_id()])
         ->with(['consignee', 'receipt'])
         ->orderBy('id', 'desc')
         ->get();
@@ -141,6 +141,9 @@ class ReceiptsController extends Controller
         return Excel::download($export, 'receipts.xlsx');
     }
 
+    /**
+     * 拉取订单
+     */
     public function pull(Request $request)
     {
         $request->offsetSet('shop_id', shop_id());

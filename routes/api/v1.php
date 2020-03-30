@@ -14,8 +14,9 @@ $api->version('v1', [
         $api->post('import', 'ReceiptsController@import');
         $api->post('close', 'ReceiptsController@close');
         $api->get('pull', 'ReceiptsController@pull');
-        $api->post('transaction/{receipt_sn}/create', 'TransactionsController@create');
+        $api->resource('transactions', 'TransactionsController');
         $api->resource('consignees', 'ConsigneesController');
+        $api->resource('logistics', 'LogisticsController');
     });
     $api->group([
         'namespace' => 'Api\Package\V1\Controllers',

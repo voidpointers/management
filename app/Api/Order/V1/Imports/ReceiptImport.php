@@ -6,7 +6,6 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Package\Entities\Logistics;
-use Package\Entities\Package;
 use Order\Entities\Receipt;
 
 // class ReceiptImport implements ToCollection, WithHeadingRow
@@ -64,14 +63,6 @@ class ReceiptImport implements ToCollection, WithStartRow
             throw new \RuntimeException('包裹不存在');
             return [];
         }
-
-        Package::whereIn('package_sn', $receipts)->update([
-            'status' => 8,
-            'print_time' => $cur_time,
-            'track_time' => $cur_time,
-            'complete_time' => $cur_time,
-            'dispatch_time' => $cur_time,
-        ]);
 
         Receipt::whereIn('package_sn', $receipts)->update([
             'status' => 8,

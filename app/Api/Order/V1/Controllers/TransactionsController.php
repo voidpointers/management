@@ -19,8 +19,10 @@ class TransactionsController extends Controller
         $this->receipt = $receipt;
     }
 
-    public function store(Request $request, $receipt_sn)
+    public function store(Request $request)
     {
+        $receipt_sn = $request->input('receipt_sn');
+
         // 判断订单是否补货订单
         $receipt = $this->receipt->where([
             'receipt_sn' => $receipt_sn, 'type' => 3
@@ -30,10 +32,5 @@ class TransactionsController extends Controller
         }
 
         $this->receipt->create($request->all());
-    }
-
-    public function update()
-    {
-
     }
 }

@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
 
-class CreatePackageLogisticsTable extends Migration
+class CreateReceiptLogisticsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +13,10 @@ class CreatePackageLogisticsTable extends Migration
      */
     public function up()
     {
-        Schema::create('package_logistics', function (Blueprint $table) {
+        Schema::create('receipt_logistics', function (Blueprint $table) {
             $table->increments('id');
             $table->string('tracking_code', 128)->default('')->comment('运单号');
-            $table->bigInteger('package_sn')->unsigned()->default(0)->comment('包裹编号');
+            $table->bigInteger('receipt_sn')->unsigned()->default(0)->comment('订单编号');
             $table->bigInteger('shipping_id')->default(0)->comment('配送ID');
             $table->integer('provider_id')->default(0)->comment('物流商ID');
             $table->integer('channel_id')->default(0)->comment('物流渠道ID');
@@ -28,13 +27,12 @@ class CreatePackageLogisticsTable extends Migration
             $table->string('remark')->default('')->comment('备注');
             $table->integer('create_time')->default(0)->comment('创建时间');
             $table->integer('update_time')->default(0)->comment('更新时间');
-            $table->integer('notification_time')->default(0)->comment('通知时间');
-            $table->unique('package_sn', 'uk_package_sn');
+            $table->unique('receipt_sn', 'uk_receipt_sn');
             $table->index(['provider_id', 'channel_id'], 'idx_provider_channel_id');
             $table->index('tracking_code', 'idx_tracking_code');
+            $table->integer('create_time')->unsigned()->default(0)->comment('创建时间');
+            $table->integer('update_time')->unsigned()->default(0)->comment('更新时间');
         });
-
-        DB::statement("ALTER TABLE `package_logistics` comment '物流'"); // 表注释
     }
 
     /**
@@ -44,6 +42,6 @@ class CreatePackageLogisticsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('package_logistics');
+        Schema::dropIfExists('receipt_logistics');
     }
 }
