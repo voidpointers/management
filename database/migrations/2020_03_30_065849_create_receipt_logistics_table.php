@@ -30,8 +30,6 @@ class CreateReceiptLogisticsTable extends Migration
             $table->unique('receipt_sn', 'uk_receipt_sn');
             $table->index(['provider_id', 'channel_id'], 'idx_provider_channel_id');
             $table->index('tracking_code', 'idx_tracking_code');
-            $table->integer('create_time')->unsigned()->default(0)->comment('创建时间');
-            $table->integer('update_time')->unsigned()->default(0)->comment('更新时间');
         });
     }
 
