@@ -23,7 +23,7 @@ class Logistics extends Model
         $create = $update = [];
 
         foreach ($params as $param) {
-            if (in_array($param['package_sn'], $logistics)) {
+            if (in_array($param['receipt_sn'], $logistics)) {
                 $update[] = $param;
             } else {
                 $create[] = $param;
