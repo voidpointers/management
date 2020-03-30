@@ -61,7 +61,7 @@ class PackagesController extends Controller
 
         // 获取订单列表
         $receipts = $this->receipt->where(['status' => 1])
-        ->whereIn('receipt_sn', $receipt_sn)
+        ->whereIn('receipt_sn', explode(',', $receipt_sn))
         ->get();
         if ($receipts->isEmpty()) {
             return $this->response->error('订单不存在或状态不正确', 500);
