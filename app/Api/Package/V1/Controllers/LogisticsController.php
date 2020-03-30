@@ -63,13 +63,13 @@ class LogisticsController extends Controller
         $channel = Channel::where(['code' => $channel_code])
         ->with(['provider'])
         ->first();
-        if ($channel) {
+        if (!$channel) {
             return $this->response->error('当前物流不支持', 500);
         }
 
         // 获取package
         $packages = Package::where(['status' => 1])
-        ->whereIn('package_sn', $package_sn)
+        ->whereIn('package_sn', explode(',', $package_sn))
         ->get();
         if ($packages->isEmpty()) {
             return $this->response->error("当前没有需要获取物流单号的包裹", 500);
