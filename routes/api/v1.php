@@ -24,7 +24,7 @@ $api->version('v1', [
         $api->resource('logistics', 'LogisticsController');
         $api->resource('packages', 'PackagesController');
         $api->post('dispatch', 'PackagesController@delivery');
-        $api->post('print', 'LogisticsController@labels');
+        $api->get('labels', 'LogisticsController@labels');
         $api->get('tracks/{order_number}', 'LogisticsController@trackInfo');
     });
     $api->group([
