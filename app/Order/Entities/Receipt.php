@@ -115,4 +115,19 @@ class Receipt extends Model
 
         return self::insert($data);
     }
+
+    public function updateByPackage($params)
+    {
+        $receipts = [];
+        // 提取订单
+        foreach ($params as $package) {
+            foreach ($package->item as $item) {
+                $receipts[$item->receipt_sn] = [
+                    'receipt_sn' => $item->receipt_sn,
+                ];
+            }
+        }
+
+        return Receipt::updateBatch($receipts, 'receipt_sn', 'receipt_sn');
+    }
 }

@@ -3,49 +3,33 @@
 namespace Api\Package\V1\Controllers;
 
 use App\Controller;
+use Common\Entities\Channel;
 use Dingo\Api\Http\Request;
 use Express\Services\ExpressService;
-use Logistics\Repositories\ChannelRepository;
-use Package\Services\LogisticsService;
-use Package\Services\PackageService;
-use Receipt\Services\ReceiptService;
-use Receipt\Services\StateMachine as ReceiptStateMachine;
+use Order\Entities\Receipt;
+use Order\Services\StateMachine as ReceiptStateMachine;
+use Package\Entities\Logistics;
+use Package\Entities\Package;
 use Package\Services\StateMachine as PackageStateMachine;
 
 class LogisticsController extends Controller
 {
-    protected $logisticsService;
-
     protected $expressService;
 
     protected $trackingService;
-
-    protected $receiptService;
-
-    protected $packageService;
 
     protected $receiptStateMachine;
 
     protected $packageStateMachine;
 
-    protected $channelRepository;
-
     public function __construct(
-        LogisticsService $logisticsService,
         ExpressService $expressService,
-        ReceiptService $receiptService,
-        PackageService $packageService,
         ReceiptStateMachine $receiptStateMachine,
-        PackageStateMachine $packageStateMachine,
-        ChannelRepository $channelRepository)
+        PackageStateMachine $packageStateMachine)
     {
-        $this->logisticsService = $logisticsService;
         $this->expressService = $expressService;
-        $this->receiptService = $receiptService;
-        $this->packageService = $packageService;
         $this->receiptStateMachine = $receiptStateMachine;
         $this->packageStateMachine = $packageStateMachine;
-        $this->channelRepository = $channelRepository;
     }
 
     public function lists(Request $request)
@@ -61,7 +45,7 @@ class LogisticsController extends Controller
      */
     public function trackInfo($tracking_code)
     {
-        $this->expressService->trackInfo($tracking_code);
+        return $this->expressService->trackInfo($tracking_code);
     }
 
     /**
@@ -70,24 +54,23 @@ class LogisticsController extends Controller
      * @param Reqeust $request
      * @param array
      */
-    public function create(Request $request)
+    public function store(Request $request)
     {
         $package_sn = json_decode($request->input('package_sn'));
         $channel_code = $request->input('channel', '');
 
         // 获取物流商信息
-        $channel = $this->channelRepository->with(['provider'])->findWhere([
-            'code' => $channel_code
-        ]);
-        if ($channel->isEmpty()) {
+        $channel = Channel::where(['code' => $channel_code])
+        ->with(['provider'])
+        ->first();
+        if ($channel) {
             return $this->response->error('当前物流不支持', 500);
         }
 
         // 获取package
-        $packages = $this->packageService->lists([
-            'in' => ['package_sn' => $package_sn],
-            'where' => ['status' => 1]
-        ]);
+        $packages = Package::where(['status' => 1])
+        ->whereIn('package_sn', $package_sn)
+        ->get();
         if ($packages->isEmpty()) {
             return $this->response->error("当前没有需要获取物流单号的包裹", 500);
         }
@@ -97,25 +80,14 @@ class LogisticsController extends Controller
         $express = $this->expressService->createOrder($packages, $channel_code);
 
         // 物流信息入库
-        $logistics = $this->logisticsService->create($express, $channel[0]);
+        (new Logistics)->store($express, $channel);
 
         // 更改包裹状态
-        $status = $this->packageStateMachine->operation('track', [
+        $this->packageStateMachine->operation('track', [
             'package_sn' => $package_sn
         ]);
 
-        // 提取订单
-        $receipts = [];
-        foreach ($packages as $package) {
-            foreach ($package->item as $item) {
-                $receipts[$item->receipt_id] = [
-                    'id' => $item->receipt_id,
-                ];
-            }
-        }
-
-        // 更新receipts表
-        // $this->receiptService->updateReceipt($receipts);
+        // (new Receipt)->updateByPackage($packages);
        
         return $this->response->array(['data' => $express]);
     }
@@ -132,15 +104,14 @@ class LogisticsController extends Controller
         if (!$tracking_codes) {
             return $this->response->error('', 500);
         }
-        $tracking_codes = json_decode($tracking_codes);
 
         $data = $this->expressService->labels($tracking_codes);
 
         // 获取包裹列表
-        $logistics = $this->packageService->logistics([
-            'in' => ['tracking_code' => $tracking_codes],
-            'where' => ['status' => 2]
-        ]);
+        $logistics = Logistics::whereIn('tracking_code', $tracking_codes)
+        ->whereHas('package', function ($query) {
+            return $query->where(['status' => 2]);
+        })->with(['package'])->get();
 
         if (!$logistics->isEmpty()) {
             $package_sn = ($logistics->pluck('package_sn')->toArray());
