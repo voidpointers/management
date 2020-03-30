@@ -56,7 +56,7 @@ class LogisticsController extends Controller
      */
     public function store(Request $request)
     {
-        $package_sn = json_decode($request->input('package_sn'));
+        $package_sn = $request->input('package_sn');
         $channel_code = $request->input('channel', '');
 
         // 获取物流商信息
