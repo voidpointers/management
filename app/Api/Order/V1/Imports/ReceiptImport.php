@@ -21,7 +21,7 @@ class ReceiptImport implements ToCollection, WithStartRow
         $receipts = Receipt::whereIn('receipt_id', $receipt_ids)
         ->whereIn('status', [1, 2])
         ->get(['receipt_sn'])
-        ->pluck('receipt_sn')
+        ->pluck('receipt_sn', 'receipt_id')
         ->all();
         if (!$receipts) {
             throw new \RuntimeException('订单不存在');

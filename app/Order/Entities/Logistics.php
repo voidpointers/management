@@ -16,6 +16,28 @@ class Logistics extends Model
 
     public function store(array $params)
     {
-        return self::insert($params);
+        $logistics = self::whereIn('receipt_sn', array_column($params, 'receipt_sn'))
+        ->get()
+        ->all();
+
+        $create = $update = [];
+
+        foreach ($params as $param) {
+            if (in_array($param['package_sn'], $logistics)) {
+                $update[] = $param;
+            } else {
+                $create[] = $param;
+            }
+        }
+
+        $res = false;
+
+        if ($create) {
+            $res = self::insert($params);
+        }
+        if ($update) {
+            $res = self::updateBatch($params, 'receipt_sn', 'receipt_sn');
+        }
+        return $res;
     }
 }
