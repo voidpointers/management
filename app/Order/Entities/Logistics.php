@@ -17,7 +17,6 @@ class Logistics extends Model
     public function store(array $params)
     {
         $logistics = self::whereIn('receipt_sn', array_column($params, 'receipt_sn'))
-        ->get()
         ->all();
 
         $create = $update = [];
@@ -31,7 +30,6 @@ class Logistics extends Model
         }
 
         $res = false;
-
         if ($create) {
             $res = self::insert($params);
         }

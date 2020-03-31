@@ -55,6 +55,7 @@ $api->version('v1', [
     ], function ($api) {
         $api->get('messages/{convo_id}/history', 'MessagesController@history');
         $api->resource('messages', 'MessagesController');
+        $api->post('messages/pending', 'MessagesController@pending');
         $api->post('drafts/approve', 'DraftsController@approve');
         $api->resource('drafts', 'DraftsController');
         $api->post('conversations/draft/approve', 'DraftsController@approve');

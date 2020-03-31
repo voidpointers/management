@@ -20,7 +20,7 @@ class ReceiptImport implements ToCollection, WithStartRow
         // 获取Receipts
         $receipts = Receipt::whereIn('receipt_id', $receipt_ids)
         ->whereIn('status', [1, 2])
-        ->get(['receipt_sn'])
+        ->select('receipt_sn', 'receipt_id')
         ->pluck('receipt_sn', 'receipt_id')
         ->all();
         if (!$receipts) {
