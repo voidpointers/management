@@ -50,14 +50,15 @@ class SalesExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
     */
     public function map($receipt): array
     {
+        $status = self::STATUS[$receipt->receipt->status];
         return [
             $receipt->receipt_id,
             $receipt->etsy_sku,
             $receipt->attributes,
             $receipt->local_sku,
             $receipt->quantity,
-            $receipt->receipt->status,
-            date('Y-m-d H:i:s', $receipt->creation_tsz),
+            $status,
+            date('Y-m-d H:i:s', $receipt->receipt->creation_tsz),
         ];
     }
 }
