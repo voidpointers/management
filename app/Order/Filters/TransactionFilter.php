@@ -8,6 +8,13 @@ trait TransactionFilter
 {
     use QueryFilter;
 
+    public function shopId($params)
+    {
+        return $this->builder->whereHas('receipt', function($query) use ($params) {
+            return $query->where('shop_id', $params);
+        });
+    }
+
     public function receiptSn($params)
     {
         return $this->builder->whereHas('receipt', function($query) use ($params) {
