@@ -132,13 +132,17 @@ class ReceiptsController extends Controller
         ->limit(1000)
         ->get();
         
+        $date = date("Ymd");
+
         if ('receipt' == $type) {
             $export = new ReceiptsExport($data);
+            $filename = "导出订单_{$date}.xlsx";
         } else {
             $export = new SalesExport($data);
+            $filename = "导出销量_{$date}.xlsx";
         }
 
-        return Excel::download($export, 'receipts.xlsx');
+        return Excel::download($export, $filename);
     }
 
     /**
