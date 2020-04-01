@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Etsy\Requests\ReceiptRequest;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Order\Entities\Consignee;
 use Order\Entities\Receipt;
 use Order\Entities\Transaction;
@@ -79,10 +80,20 @@ class ReceiptPull extends Command
             return;
         }
 
+        DB::beginTransaction();
+
         // 入库
-        (new Receipt())->store($data);
-        (new Transaction())->store($data);
-        (new Consignee())->store($data);
+        try {
+            (new Receipt())->store($data);
+            (new Transaction())->store($data);
+            (new Consignee())->store($data);
+        } catch (\Exception $e) {
+            custom_log('error', 'receipt.log', $e->getMessage());
+            DB::rollBack();
+            throw $e;
+        }
+
+        DB::commit();
 
         echo json_encode($params) . " 执行完毕" . PHP_EOL;
         usleep(100);
