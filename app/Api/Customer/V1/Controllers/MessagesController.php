@@ -51,8 +51,11 @@ class MessagesController extends Controller
         $factory = new AggregateFactory();
         $aggregates = [];
         foreach ($this->counts as $key => $value) {
-            $aggregates[$key] = $factory->setEntities($value['entities'])
+            $count = $factory->setEntities($value['entities'])
             ->countBy([$value['field'] => $message->sender_id]);
+            if ('mail' == $key) $count = 1 < $count ? $count - 1 : 0;
+
+            $aggregates[$key] = $count;
         }
 
         return $this->response->paginator(
