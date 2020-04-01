@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Cache;
 use Order\Entities\Consignee;
 use Order\Entities\Receipt;
 use Order\Entities\Transaction;
-use Receipt\Services\ReceiptService;
 
 class ReceiptPull extends Command
 {
