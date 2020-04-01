@@ -21,7 +21,16 @@ class ReceiptRequest
                 'Transactions' => ['associations' => ['MainImage']]
             ]
         ]);
-        return $receipts['results'] ?? [];
+        $data = $receipts['results'] ?? [];
+        if (!$data) {
+            return [];
+        }
+
+        return array_map(function ($item) use ($params) {
+            $item['receipt_sn'] = generate_uniqid();
+            $item['shop_id'] = $params['shop_id'];
+            return $item;
+        }, $data);
     }
 
     /**

@@ -23,16 +23,15 @@ class Consignee extends Model
         'phone',
     ];
 
-    public function store(array $params)
+    public function store(array $params, $uk = 'receipt_id')
     {
-        $data = [];
-        // 参数过滤
-        foreach ($params as $key => $param) {
-            foreach ($this->fillable as $fillable) {
-                $data[$key][$fillable] = $param[$fillable] ?? '';
+        $data = array_map(function ($item) {
+            if (!$item['second_line']) {
+                $item['second_line'] = '';
             }
-        }
-
-        self::insert($data);
+            return $item;
+        }, $params);
+        
+        return parent::store($data, $uk);
     }
 }

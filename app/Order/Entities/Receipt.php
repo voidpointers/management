@@ -19,8 +19,7 @@ class Receipt extends Model
         'buyer_email', 'status', 'package_sn', 'payment_method',
         'total_price', 'subtotal', 'grandtotal', 'adjusted_grandtotal', 'total_tax_cost',
         'total_vat_cost', 'total_shipping_cost', 'seller_msg', 'buyer_msg', 'buyer_msg_zh',
-        'remark', 'creation_tsz', 'modified_tsz', 'create_time', 'update_time', 'packup_time',
-        'dispatch_time', 'close_time', 'complete_time'
+        'remark', 'creation_tsz', 'modified_tsz'
     ];
 
     protected $appends = ['status_str'];
@@ -91,30 +90,6 @@ class Receipt extends Model
         return $query->with(['consignee', 'transaction'])->get();
     }
 
-    public function store(array $params)
-    {
-        $data = [];
-        // 参数过滤
-        foreach ($params as $key => $param) {
-            foreach ($this->fillable as $fillable) {
-                if ($value = $param[$fillable] ?? '') {
-                    $data[$key][$fillable] = $value;
-                }
-            }
-            $data[$key]['modified_tsz'] = $param['last_modified_tsz'] ?? 0;
-            $data[$key]['create_time'] = time();
-            $data[$key]['update_time'] = time();
-            $data[$key]['type'] = 1;
-            $data[$key]['complete_time'] = ($param['was_shipped'] ?? 0)
-                ? $param['last_modified_tsz'] : 0;
-            $data[$key]['seller_msg'] = $param['message_from_seller'] ?? '';
-            $data[$key]['buyer_msg'] = $param['message_from_buyer'] ?? '';
-            $data[$key]['buyer_msg_zh'] = '';
-        }
-
-        return self::insert($data);
-    }
-
     public function updateByPackage($params)
     {
         $receipts = [];
@@ -128,5 +103,32 @@ class Receipt extends Model
         }
 
         return Receipt::updateBatch($receipts, 'receipt_sn', 'receipt_sn');
+    }
+
+    public function store(array $params, $uk = 'receipt_id')
+    {
+        $data = array_map(function ($item) {
+            return $this->padding($item);
+        }, $params);
+        return parent::store($data, $uk);
+    }
+
+    protected function padding($params)
+    {
+        $was_shipped = $params['was_shipped'] ?? 0;
+
+        $params['status'] = $was_shipped ? 8 : 1;
+        $params['shop_id'] = $params['shop_id'];
+        $params['modified_tsz'] = $params['last_modified_tsz'] ?? 0;
+        $params['create_time'] = time();
+        $params['update_time'] = time();
+        $params['type'] = 1;
+        $params['complete_time'] = $was_shipped
+            ? $params['last_modified_tsz'] : 0;
+        $params['seller_msg'] = $params['message_from_seller'] ?? '';
+        $params['buyer_msg'] = $params['message_from_buyer'] ?? '';
+        $params['buyer_msg_zh'] = '';
+
+        return $params;
     }
 }

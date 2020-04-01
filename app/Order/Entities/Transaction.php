@@ -10,7 +10,14 @@ class Transaction extends Model
 {
     use TransactionFilter;
 
+    const UPDATED_AT = null;
+
     protected $table = 'receipt_transactions';
+
+    protected $fillable = [
+        'receipt_sn', 'receipt_id', 'transaction_id', 'listing_id', 'title', 'etsy_sku', 'local_sku',
+        'image', 'price', 'quantity', 'attributes', 'variations', 'paid_tsz', 'shipped_tsz'
+    ];
 
     public function receipt()
     {
@@ -37,35 +44,33 @@ class Transaction extends Model
         return str_replace('75x75', '300x300', $this->attributes['image']);
     }
 
-    public function store(array $params)
+    public function store(array $params, $uk = 'transaction_id')
     {
         $data = [];
-        // 参数过滤
-        foreach ($params as $param) {
-            foreach ($param['Transactions'] as $key => $value) {
-                $data[] = [
-                    'receipt_sn' => $param['receipt_sn'],
-                    'receipt_id' => $param['receipt_id'],
-                    'title' => $value['title'],
-                    'transaction_id' => $value['transaction_id'],
-                    'listing_id' => $value['listing_id'],
-                    'price' => $value['price'],
-                    'quantity' => $value['quantity'],
-                    'etsy_sku' => $value['product_data']['sku'],
-                    'image' => $value['MainImage']['url_75x75'],
-                    'attributes' => "[]",
-                    'variations' => json_encode(array_map(function ($variations) {
-                        return [
-                            'name' => $variations['formatted_name'],
-                            'value' => $variations['formatted_value'],
-                        ];
-                    }, $value['variations'])),
-                    'paid_tsz' => $value['paid_tsz'] ?? 0,
-                    'shipped_tsz' => $value['shipped_tsz'] ?? 0
-                ];
+        foreach ($params as $receipt) {
+            foreach ($receipt['Transactions'] as $value) {
+                $data[] = $this->padding($value, $receipt);
             }
         }
 
-        return self::insert($data);
+        return parent::store($data, $uk);
+    }
+
+    protected function padding($params, $receipt)
+    {
+        $params['receipt_sn'] = $receipt['receipt_sn'];
+        $params['receipt_id'] = $receipt['receipt_id'];
+        $params['variations'] = json_encode(array_map(function ($variations) {
+            return [
+                'name' => $variations['formatted_name'],
+                'value' => $variations['formatted_value'],
+            ];
+        }, $params['variations']));
+        $params['image'] = $params['MainImage']['url_75x75'];
+        $params['attributes'] = "[]";
+        $params['shipped_tsz'] = $params['shipped_tsz'] ?? 0;
+        $params['paid_tsz'] = $params['paid_tsz'] ?? 0;
+
+        return $params;
     }
 }

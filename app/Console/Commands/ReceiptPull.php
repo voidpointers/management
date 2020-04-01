@@ -74,19 +74,25 @@ class ReceiptPull extends Command
 
     protected function pull($params)
     {
-        $data = $this->receiptRequest->filters($params);
+        $data = $this->receiptRequest->receipts($params);
         if (empty($data)) {
             echo "订单列表为空" . PHP_EOL;
             return;
         }
 
+        $entities = [
+            Receipt::class,
+            Transaction::class,
+            Consignee::class
+        ];
+
         DB::beginTransaction();
 
         // 入库
         try {
-            (new Receipt())->store($data);
-            (new Transaction())->store($data);
-            (new Consignee())->store($data);
+            foreach ($entities as $item) {
+                (new $item)->store($data);
+            }
         } catch (\Exception $e) {
             custom_log('error', 'receipt.log', $e->getMessage());
             DB::rollBack();

@@ -42,6 +42,48 @@ class Model extends IlluminateModel
      */
     const UPDATED_AT = 'update_time';
 
+    public function filtering(array $params = [])
+    {
+        $fillable = $this->fillable;
+        if (!$fillable) {
+            return $params;
+        }
+
+        return array_filter($params, function ($key) use($fillable) {
+            return in_array($key, $fillable);
+        }, ARRAY_FILTER_USE_KEY);
+    }
+
+    public function store(array $params, $uk = 'id')
+    {
+        $params = array_column($params, null, $uk);
+        // 获取已入库数据
+        $temp = static::whereIn(
+            $uk, array_keys($params)
+        )->pluck($uk)->all();
+
+        $create = $update = [];
+
+        foreach ($params as $key => $value) {
+            // 过滤数据
+            $value = $this->filtering($value);
+            if (in_array($key, $temp)) {
+                $update[] = $value;
+            } else {
+                $create[] = $value;
+            }
+        }
+
+        if ($update) {
+            $res = self::updateBatch($update, $uk, $uk);
+        }
+        if ($create) {
+            $res = self::insert($create);
+        }
+
+        return $res;
+    }
+
     /**
      * 批量更新
      *
