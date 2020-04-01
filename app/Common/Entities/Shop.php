@@ -15,11 +15,6 @@ class Shop extends Model
         return $this->hasOne(Declares::class, 'shop_id', 'shop_id');
     }
 
-    public function getCountReceiptsAttribute()
-    {
-        return $this->attributes['count_receipts'];
-    }
-
     public function store($params)
     {
         $shop = get_shop();
