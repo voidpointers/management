@@ -14,9 +14,17 @@ use Product\Entities\Listing;
 class ShopsController extends Controller
 {
     protected $counts = [
-        'receipt' => Receipt::class,
-        'message' => Message::class,
-        'listing' => Listing::class,
+        'receipt' => [
+            'entities' => Receipt::class,
+            'where' => ['status' => 1]
+        ],
+        'message' => [
+            'entities' => Message::class,
+            'where' => ['status' => 1]
+        ],
+        'listing' => [
+            'entities' => Listing::class,
+        ],
     ];
 
     public function index(Request $request)
@@ -37,8 +45,10 @@ class ShopsController extends Controller
             
             $data->each(function ($item) use ($factory) {
                 $aggregates = [];
-                foreach ($this->counts as $key => $entities) {
-                    $instance = $factory->setEntities($entities)->countGroup('shop_id');
+                foreach ($this->counts as $key => $value) {
+                    $instance = $factory->setEntities($value['entities'])
+                    ->countGroup('shop_id', $value['where'] ?? []);
+
                     $aggregates[$key] = $instance[$item->shop_id]->total ?? 0;
                 }
                 $item->aggregates = $aggregates;
