@@ -50,13 +50,16 @@ class ReceiptsController extends Controller
      */
     public function index(Request $request)
     {
-        $receipts = $this->receipt->apply($request)
-        ->where(['shop_id' => shop_id()])
-        ->with(['consignee', 'transaction', 'logistics'])
+        $applay = $this->receipt->apply($request);
+        if (!$request->has('shop_id')) {
+            $applay = $applay->where(['shop_id' => shop_id()]);
+        }
+
+        $data = $applay->with(['consignee', 'transaction', 'logistics'])
         ->orderBy('creation_tsz', 'desc')
         ->paginate($request->get('limit', 30));
 
-        return $this->response->paginator($receipts, new ReceiptTransformer);
+        return $this->response->paginator($data, new ReceiptTransformer);
     }
 
     /**

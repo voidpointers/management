@@ -8,6 +8,11 @@ trait ListingFilter
 {
     use QueryFilter;
 
+    public function shopId($params)
+    {
+        return $this->builder->where('shop_id', $params);
+    }
+
     public function listingIds($params)
     {
         return $this->builder->whereIn('listing_id', explode(',', $params));

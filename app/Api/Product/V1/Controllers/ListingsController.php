@@ -23,16 +23,18 @@ class ListingsController extends Controller
     
     public function index(Request $request)
     {
-        $query = $this->listing->apply($request)
-        ->where(['shop_id' => shop_id()]);
+        $applay = $this->listing->apply($request);
+        if (!$request->has('shop_id')) {
+            $applay = $applay->where(['shop_id' => shop_id()]);
+        }
 
         $transfomer = ListingTransformer::class;
         if ('all' == $request->get('query')) {
-            $query->with(['images']);
+            $applay->with(['images']);
             $transfomer = DetailTransformer::class;
         }
 
-        $data = $query->orderBy('id', 'desc')
+        $data = $applay->orderBy('id', 'desc')
         ->paginate($request->get('limit', 30));
 
         return $this->response->paginator(
