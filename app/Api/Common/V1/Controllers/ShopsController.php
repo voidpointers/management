@@ -2,20 +2,22 @@
 
 namespace Api\Common\V1\Controllers;
 
-use Aggregate\Services\ReceiptService;
+use Aggregate\Services\AggregateFactory;
 use Api\Common\V1\Transforms\ShopTransformer;
 use App\Controller;
 use Dingo\Api\Http\Request;
 use Common\Entities\Shop;
+use Customer\Entities\Message;
+use Order\Entities\Receipt;
+use Product\Entities\Listing;
 
 class ShopsController extends Controller
 {
-    protected $receiptService;
-
-    public function __construct(ReceiptService $receiptService)
-    {
-        $this->receiptService = $receiptService;
-    }
+    protected $counts = [
+        'count_receipts' => Receipt::class,
+        'count_messages' => Message::class,
+        'count_listings' => Listing::class,
+    ];
 
     public function index(Request $request)
     {
@@ -30,11 +32,16 @@ class ShopsController extends Controller
         ->select($columns)
         ->paginate($request->get('limit', 30));
 
-        $aggregates = $this->receiptService->count();
-
-        $data->each(function ($item) use ($aggregates) {
-            $item->count_receipts = $aggregates[$item->shop_id]->total ?? 0;
-        });
+        if ('few' != $query) {
+            $factory = new AggregateFactory();
+            
+            $data->each(function ($item) use ($factory) {
+                foreach ($this->counts as $key => $entities) {
+                    $aggregates = $factory->setEntities($entities)->count();
+                    $item->$key = $aggregates[$item->shop_id]->total ?? 0;
+                }
+            });
+        }
 
         return $this->response->paginator(
             $data,
