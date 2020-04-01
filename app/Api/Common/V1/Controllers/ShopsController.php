@@ -31,8 +31,9 @@ class ShopsController extends Controller
         ->paginate($request->get('limit', 30));
 
         $aggregates = $this->receiptService->count();
-        $data = $data->data->map(function ($value) use ($aggregates) {
-            return $value->put('receipt', $aggregates[$value->shop_id]);
+
+        $data->each(function ($item) use ($aggregates) {
+            $item->count_receipts = $aggregates[$item->shop_id]->total ?? 0;
         });
 
         return $this->response->paginator(

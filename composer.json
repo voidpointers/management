@@ -38,7 +38,8 @@
             "Common\\": "app/Common",
             "Etsy\\": "app/Etsy",
             "Product\\": "app/Product",
-            "Customer\\": "app/Customer"
+            "Customer\\": "app/Customer",
+            "Aggregate\\": "app/Aggregate"
         }
     },
     "autoload-dev": {

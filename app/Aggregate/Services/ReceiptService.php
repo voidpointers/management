@@ -2,7 +2,7 @@
 
 namespace Aggregate\Services;
 
-use Common\Entities\Shop;
+use Illuminate\Support\Facades\DB;
 use Order\Entities\Receipt;
 
 class ReceiptService
@@ -16,9 +16,10 @@ class ReceiptService
 
     public function count(array $params = [])
     {
-        return Shop::where(['status' => 1])
+        return Receipt::where(['status' => 1])
+        ->select('shop_id', DB::raw('COUNT(*) as total'))
         ->groupBy('shop_id')
-        ->count()
+        ->get()
         ->keyBy('shop_id');
     }
 }
