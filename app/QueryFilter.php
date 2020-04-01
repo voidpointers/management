@@ -17,7 +17,7 @@ trait QueryFilter
         foreach ($request->all() as $name => $value) {
             $name = camelize($name, '_');
             $filter = array_filter([$value], function ($item) {
-                if (!$item) {
+                if (!$item || $item < 0) {
                     return false;
                 }
                 return true;
