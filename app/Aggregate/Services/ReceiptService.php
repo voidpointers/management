@@ -16,8 +16,7 @@ class ReceiptService
 
     public function count(array $params = [])
     {
-        return Receipt::where(['status' => 1])
-        ->select('shop_id', DB::raw('COUNT(*) as total'))
+        return Receipt::select('shop_id', DB::raw('COUNT(*) as total'))
         ->groupBy('shop_id')
         ->get()
         ->keyBy('shop_id');
