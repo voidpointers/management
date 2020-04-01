@@ -50,7 +50,7 @@ class Listing extends Model
         return $this->hasMany(Inventory::class, 'listing_id', 'listing_id');
     }
 
-    public function store($params)
+    public function store($params, $uk = 'listing_id')
     {
         $listing_ids = self::whereIn('listing_id', array_column($params, 'listing_id'))
         ->pluck('listing_id')

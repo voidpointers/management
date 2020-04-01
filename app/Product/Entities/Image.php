@@ -21,7 +21,7 @@ class Image extends Model
 
     protected $fillable = ['listing_id', 'url', 'image_id', 'sort'];
 
-    public function store($params)
+    public function store($params, $uk = 'listing_id')
     {
         $listings = self::whereIn('listing_id', array_column($params, 'listing_id'))
         ->get();

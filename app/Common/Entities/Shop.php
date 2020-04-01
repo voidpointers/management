@@ -15,7 +15,7 @@ class Shop extends Model
         return $this->hasOne(Declares::class, 'shop_id', 'shop_id');
     }
 
-    public function store($params)
+    public function store($params, $uk = 'shop_id')
     {
         $shop = get_shop();
 

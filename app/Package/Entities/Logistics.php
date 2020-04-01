@@ -19,19 +19,23 @@ class Logistics extends Model
         return $this->belongsTo(Package::class, 'package_sn', 'package_sn');
     }
 
-    public function store($logistics, $channel)
+    // public function store($logistics, $channel)
+    /**
+     * TODO 优化存储方法
+     */
+    public function store($logistics, $uk = 'package_sn')
     {
         $data = [];
 
         foreach ($logistics as $value) {
             $data[] = [
                 'package_sn' => $value['package_sn'],
-                'provider_id' => $channel->provider_id,
-                'channel_id' => $channel->id,
+                // 'provider_id' => $channel->provider_id,
+                // 'channel_id' => $channel->id,
                 'tracking_code' => $value['tracking_code'],
                 'provider' => json_encode([
-                    'provider' => $channel->provider->title,
-                    'channel' => $channel->title,
+                    // 'provider' => $channel->provider->title,
+                    // 'channel' => $channel->title,
                 ]),
                 'remark' => $value['remark'] ?? '',
                 'status' => 1, // 已发货

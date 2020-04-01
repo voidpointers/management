@@ -20,7 +20,7 @@ class Inventory extends Model
         "is_enabled"
     ];
 
-    public function store($params)
+    public function store($params, $uk = 'product_id')
     {
         $inventories = self::whereIn('product_id', array_column($params, 'product_id'))
             ->pluck('product_id')

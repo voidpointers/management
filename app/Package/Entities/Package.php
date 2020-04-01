@@ -56,7 +56,7 @@ class Package extends Model
         return $query->whereBetween('create_time', $create_time);
     }
 
-    public function store($receipts)
+    public function store($receipts, $uk = 'package_sn')
     {
         $packages = $items = [];
 
