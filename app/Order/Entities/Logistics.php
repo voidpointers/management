@@ -14,7 +14,7 @@ class Logistics extends Model
         return $this->hasOne(Channel::class, 'id', 'channel_id');
     }
 
-    public function store(array $params)
+    public function store(array $params, $uk = 'receipt_sn')
     {
         $logistics = self::whereIn('receipt_sn', array_column($params, 'receipt_sn'))
         ->all();
