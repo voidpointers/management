@@ -14,11 +14,17 @@ class AggregateFactory
         return $this;
     }
 
-    public function count(array $params = [])
+    public function countGroup($params)
     {
-        return $this->entities::select('shop_id', DB::raw('COUNT(*) as total'))
-        ->groupBy('shop_id')
+        return $this->entities::select($params, DB::raw('COUNT(*) as total'))
+        ->groupBy($params)
         ->get()
-        ->keyBy('shop_id');
+        ->keyBy($params);
+    }
+
+    public function countBy($params)
+    {
+        return $this->entities::where($params)
+        ->count();
     }
 }

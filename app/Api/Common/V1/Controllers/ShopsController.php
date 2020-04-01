@@ -38,7 +38,7 @@ class ShopsController extends Controller
             $data->each(function ($item) use ($factory) {
                 $aggregates = [];
                 foreach ($this->counts as $key => $entities) {
-                    $instance = $factory->setEntities($entities)->count();
+                    $instance = $factory->setEntities($entities)->countGroup('shop_id');
                     $aggregates[$key] = $instance[$item->shop_id]->total ?? 0;
                 }
                 $item->aggregates = $aggregates;

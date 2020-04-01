@@ -2,15 +2,22 @@
 
 namespace Api\Customer\V1\Controllers;
 
+use Aggregate\Services\AggregateFactory;
 use Api\Customer\V1\Transforms\DetailTransformer;
 use Api\Customer\V1\Transforms\MessageTransformer;
 use App\Controller;
 use Customer\Entities\Detail;
 use Dingo\Api\Http\Request;
 use Customer\Entities\Message;
+use Order\Entities\Receipt;
 
 class MessagesController extends Controller
 {
+    protected $counts = [
+        'order' => ['entities' => Receipt::class, 'field' => 'buyer_user_id'],
+        'mail' => ['entities' => Message::class, 'field' => 'sender_id']
+    ];
+
     protected $message;
 
     public function __construct(Message $message)
@@ -34,15 +41,24 @@ class MessagesController extends Controller
 
     public function show(Request $request, $conversation_id)
     {
-        $messages = Detail::with(['user'])
+        $message = Message::where(['conversation_id' => $conversation_id])->first();
+
+        $details = Detail::with(['user'])
         ->where('conversation_id', (int) $conversation_id)
         ->orderBy('sort', 'asc')
         ->paginate((int) $request->get('limit', 200));
 
+        $factory = new AggregateFactory();
+        $aggregates = [];
+        foreach ($this->counts as $key => $value) {
+            $aggregates[$key] = $factory->setEntities($value['entities'])
+            ->countBy([$value['field'] => $message->sender_id]);
+        }
+
         return $this->response->paginator(
-            $messages,
+            $details,
             new DetailTransformer
-        )->addMeta('aggregates', ['order' => 1, 'mail' => 100]);
+        )->addMeta('aggregates', $aggregates);
     }
 
     public function history(Request $request, $conversation_id)
