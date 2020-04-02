@@ -48,7 +48,7 @@ class TemplatesController extends Controller
 
     public function update(Request $request, $template_id)
     {
-        $data = $this->template->where(['id' => $template_id])
+        $this->template->where(['id' => $template_id])
         ->update($request->all());
 
         return ['msg' => 'success'];
