@@ -60,6 +60,7 @@ $api->version('v1', [
         $api->resource('drafts', 'DraftsController');
         $api->post('conversations/draft/approve', 'DraftsController@approve');
         $api->resource('receipts', 'ReceiptsController');
+        $api->resource('templates', 'TemplatesController');
     });
     $api->group([
         'namespace' => 'Api\Product\V1\Controllers',
