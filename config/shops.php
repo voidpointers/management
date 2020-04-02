@@ -1,6 +1,11 @@
 <?php
 
 return [
+    0 => [
+        'shop_name' => '',
+        'spider' => '',
+        'user_id' => 0
+    ],
     16333181 => [
         'shop_name' => 'FastestSloth',
         'spider' => 'http://149.248.7.236:6800',
