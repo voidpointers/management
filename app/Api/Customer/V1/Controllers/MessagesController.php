@@ -28,7 +28,7 @@ class MessagesController extends Controller
     public function index(Request $request)
     {
         $applay = $this->message->apply($request);
-        if (!$request->has('shop_id')) {
+        if (shop_id()) {
             $applay = $applay->where(['shop_id' => shop_id()]);
         }
 

@@ -16,7 +16,11 @@ class ShopSwitch
      */
     public function handle($request, Closure $next)
     {
-        Cache::store('array')->put('shop_id', $request->header('shop_id'));
+        $shop_id = $request->input('shop_id', 0);
+        if (1 > $shop_id && -1 != $shop_id) {
+            $shop_id = $request->header('shop_id');
+        }
+        Cache::store('array')->put('shop_id', $shop_id);
         return $next($request);
     }
 }
