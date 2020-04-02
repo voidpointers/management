@@ -51,8 +51,6 @@ class TemplatesController extends Controller
         $data = $this->template->where(['id' => $template_id])
         ->update($request->all());
 
-        return $this->response->item(
-            $data, new TemplateTransformer
-        );
+        return ['msg' => 'success'];
     }
 }
