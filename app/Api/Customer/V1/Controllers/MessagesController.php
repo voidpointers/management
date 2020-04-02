@@ -93,11 +93,13 @@ class MessagesController extends Controller
     public function review(Request $request)
     {
         $conversation_id = $request->input('conversation_id');
-        $convos = explode(',', $conversation_id);
+        if (1 > ($shop_id = shop_id())) {
+            return $this->response->error('缺少店铺ID', 500);
+        }
 
-        Message::whereIn('conversation_id', $convos)->update([
-            'status' => 2, 'is_unread' => 0
-        ]);
+        Message::where(['shop_id', $shop_id])
+        ->whereIn('conversation_id', explode(',', $conversation_id))
+        ->update(['status' => 2]);
 
         return $this->response->array(['msg' => '转移待审核成功']);
     }
@@ -108,9 +110,13 @@ class MessagesController extends Controller
     public function pending(Request $request)
     {
         $conversation_id = $request->input('conversation_id');
-        $convos = explode(',', $conversation_id);
+        if (1 > ($shop_id = shop_id())) {
+            return $this->response->error('缺少店铺ID', 500);
+        }
 
-        Message::whereIn('conversation_id', $convos)->update(['status' => 1]);
+        Message::where(['shop_id', $shop_id])
+        ->whereIn('conversation_id', explode(',', $conversation_id))
+        ->update(['status' => 1]);
 
         return $this->response->array(['msg' => '转移未处理成功']);
     }
