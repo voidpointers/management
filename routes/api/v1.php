@@ -54,6 +54,7 @@ $api->version('v1', [
         'prefix' => 'customer'
     ], function ($api) {
         $api->get('messages/{convo_id}/history', 'MessagesController@history');
+        $api->get('templates/placeholder', 'TemplateController@placeholder');
         $api->resource('messages', 'MessagesController');
         $api->post('messages/pending', 'MessagesController@pending');
         $api->post('drafts/approve', 'DraftsController@approve');

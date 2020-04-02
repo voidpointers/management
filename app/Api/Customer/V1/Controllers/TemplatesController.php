@@ -43,7 +43,7 @@ class TemplatesController extends Controller
             $request->offsetSet('attachments', '');
         }
         $data = $this->template->firstOrCreate($request->all());
-        
+
         return $this->response->item(
             $data, new TemplateTransformer
         );
@@ -55,5 +55,11 @@ class TemplatesController extends Controller
         ->update($request->all());
 
         return ['msg' => 'success'];
+    }
+
+    public function placeholder(Request $request)
+    {
+        $data = config('placeholders');
+        return $this->response->array($data);
     }
 }
