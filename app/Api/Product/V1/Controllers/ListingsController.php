@@ -24,7 +24,7 @@ class ListingsController extends Controller
     public function index(Request $request)
     {
         $applay = $this->listing->apply($request);
-        if (!$request->has('shop_id')) {
+        if (shop_id() && -1 != shop_id()) {
             $applay = $applay->where(['shop_id' => shop_id()]);
         }
 
