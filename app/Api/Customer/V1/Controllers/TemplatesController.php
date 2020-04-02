@@ -39,8 +39,11 @@ class TemplatesController extends Controller
 
     public function store(Request $request)
     {
+        if (!$request->has('attachments')) {
+            $request->offsetSet('attachments', '');
+        }
         $data = $this->template->firstOrCreate($request->all());
-
+        
         return $this->response->item(
             $data, new TemplateTransformer
         );
