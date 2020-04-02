@@ -33,6 +33,7 @@ $app->configure('auth');
 $app->configure('api');
 $app->configure('excel');
 $app->configure('shops');
+$app->configure('placeholders');
 
 /*
 |--------------------------------------------------------------------------
