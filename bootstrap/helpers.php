@@ -143,7 +143,7 @@ if (!function_exists('shops')) {
     {
         $shops = Cache::store('file')->get('ywysys_shops');
         if (!$shops) {
-            $shops = (array) DB::table('shops')->get();
+            $shops = DB::table('shops')->get()->keyBy('shop_id');
             Cache::store('file')->set('ywysys_shops', $shops);
         }
         return $shops;
