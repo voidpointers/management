@@ -28,7 +28,7 @@ class MessagesController extends Controller
     public function index(Request $request)
     {
         $applay = $this->message->apply($request);
-        if (shop_id() && -1 != shop_id()) {
+        if (shop_id()) {
             $applay = $applay->where(['shop_id' => shop_id()]);
         }
 
@@ -124,11 +124,13 @@ class MessagesController extends Controller
     public function complete(Request $request)
     {
         $conversation_id = $request->input('conversation_id');
-        $convos = explode(',', $conversation_id);
+        if (1 > ($shop_id = shop_id())) {
+            return $this->response->error('缺少店铺ID', 500);
+        }
 
-        Message::whereIn('conversation_id', $convos)->update([
-            'status' => 8, 'is_unread' => 0
-        ]);
+        Message::where(['shop_id', $shop_id])
+        ->whereIn('conversation_id', explode(',', $conversation_id))
+        ->update(['status' => 8, 'is_unread' => 0]);
 
         return $this->response->array(['msg' => '转移已提交成功']);
     }

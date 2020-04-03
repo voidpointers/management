@@ -127,7 +127,7 @@ if (!function_exists('set_shop')) {
 }
 
 if (!function_exists('get_shop')) {
-    function get_shop($shop_id = 0)
+    function get_shop($shop_id = 0, $query = false)
     {
         $shop = Cache::store('file')->get('shop_' . $shop_id);
         if (!$shop) {
@@ -136,4 +136,16 @@ if (!function_exists('get_shop')) {
         }
         return $shop;
     }
+}
+
+if (!function_exists('shops')) {
+    function shops()
+    {
+        $shops = Cache::store('file')->get('ywysys_shops');
+        if (!$shops) {
+            $shops = (array) DB::table('shops')->get();
+            Cache::store('file')->set('ywysys_shops', $shops);
+        }
+        return $shops;
+    } 
 }
