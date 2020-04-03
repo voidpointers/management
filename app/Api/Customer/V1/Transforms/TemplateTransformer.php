@@ -9,6 +9,8 @@ class TemplateTransformer extends TransformerAbstract
 {
     public function transform(Template $template)
     {
-        return $template->attributesToArray();
+        $data = $template->attributesToArray();
+        $data['shop_name'] = shops()[$template->shop_id]->shop_name ?? '';
+        return $data;
     }
 }
