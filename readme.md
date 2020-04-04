@@ -1,12 +1,27 @@
 # 部署
 
+## 依赖环境
+
+- php7.0 +
+- mysql5.6 +
+
+- Windows环境可使用集成环境 XAMPP https://www.apachefriends.org/index.html
+
 ## 拉取代码
 
 ```shell
-git clone https://email:password@gitee.com/hiywy/ywysys_back_v2.git
+git clone https://{email}:{password}@gitee.com/hiywy/ywysys_back_v2.git
 ```
 
+备注
+{email} 邮箱【@需要转换为%40。例: vip%40qq.com】
+{password} 密码
+
 ## 初始化
+
+### 设置可写权限【日志，图片上传】
+
+chmod -R 777 storage
 
 ### 安装composer扩展包
 
@@ -16,11 +31,17 @@ git clone https://email:password@gitee.com/hiywy/ywysys_back_v2.git
 composer install
 ```
 
-### 配置DEV文件
+### 创建数据库
+
+```sql
+CREATE DATABASE `ywysys` DEFAULT CHARACTER SET = `utf8mb4`;
+```
+
+### 配置 .env 文件
+
+> 执行命令 cp .env.example .env 或手动拷贝将 .env.example 为 .env
 
 ```php
-
-cp .env.example .env
 
 # 配置数据库
 DB_CONNECTION=mysql
@@ -31,18 +52,15 @@ DB_USERNAME=root
 DB_PASSWORD=password
 
 # 配置API域名(二选一)
-API_DOMAIN=
-# 或使用ip+端口使用(二选一)
-API_PREFIX=
-
-# 配置云途物流
-YT_HOST=
-YT_APP_KEY=
-YT_APP_SECRET=
+API_DOMAIN=http://api.createos.xyz
+# ip+端口使用(二选一)
+API_PREFIX=api
 
 ```
 
-### 生成JWT SECRET
+### 数据初始化
+
+- 生成JWT SECRET
 
 > 管理员登录令牌
 
@@ -50,27 +68,45 @@ YT_APP_SECRET=
 php artisan jwt:secret
 ```
 
-### 执行迁移文件，生成数据库
+- 生成数据表
 
 ```shell
 php artisan migrate
 ```
 
-### 拉取订单
+- 初始化数据
 
-> 可根据需要做成定时任务，一分钟执行一次
-
-```shell
-php artisan receipt:pull page --shop=16407439
-```
-
-### 初始化国家数据
+  - 管理员
+  - 国家列表
+  - 物流渠道
 
 ```shell
-php artisan country:pull
+php artisan db:seed
 ```
 
-## 配置WebServer（以Nginx为例）
+### 自动同步订单【可使用接口手动拉取】
+
+> 可根据需要做成定时任务，一分钟执行一次，以Linux Crontab为例
+
+```shell
+*/1 * * * * php /www/ywysys_back_v2/artisan receipt:pull page --page=1 --limit=10 --shop=16407439 > /dev/null 2>&1
+```
+
+## 配置WebServer
+
+- 前端界面
+
+/www/ywysys_web
+
+- 后端API
+
+/www/ywysys_back_v2/public
+
+- 图片服务路径
+
+/www/ywysys_back_v2/storage/app/public
+
+### Nginx 配置示例
 
 ```nginx
 
@@ -79,7 +115,7 @@ server
 {
   server_name pre.admin.createos.xyz;
   listen 80;
-  root  /www/pre/ywysys_web;
+  root  /www/ywysys_web;
 
   location / {
     try_files $uri $uri/ /index.html;
@@ -96,7 +132,7 @@ server
   server_name pre.api.createos.xyz;
   listen 80;
 
-  root /www/pre/ywysys_back_v2/public;
+  root /www/ywysys_back_v2/public;
 
   # 配置图片URL
   location /images {
@@ -115,11 +151,3 @@ server
   }
 }
 ```
-
-> 配置完需要reload nginx
-
-### 图片上传权限
-
-chmod -R 777 storage/app
-
-### 初始化用户
