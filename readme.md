@@ -19,19 +19,29 @@ git clone https://{email}:{password}@gitee.com/hiywy/ywysys_back_v2.git
 
 ## 初始化
 
+> 项目根目录 Linux系统示例：/www/ywysys_back_v2 Windows系统示例： C:\www\ywysys_back_v2
+
 ### 设置可写权限【日志，图片上传】
 
+```shell
+cd /www/ywysys_back_v2
+
 chmod -R 777 storage
+```
 
 ### 安装composer扩展包
 
 > composer安装教程：https://www.phpcomposer.com/
 
 ```shell
+cd /www/ywysys_back_v2
+
 composer install
 ```
 
 ### 创建数据库
+
+连接数据库后执行
 
 ```sql
 CREATE DATABASE `ywysys` DEFAULT CHARACTER SET = `utf8mb4`;
@@ -39,7 +49,15 @@ CREATE DATABASE `ywysys` DEFAULT CHARACTER SET = `utf8mb4`;
 
 ### 配置 .env 文件
 
-> 执行命令 cp .env.example .env 或手动拷贝将 .env.example 为 .env
+> 执行以下命令或手动拷贝将 .env.example 为 .env
+
+```shell
+cd /www/ywysys_back_v2
+
+cp .env.example .env 
+```
+
+使用vim 或者其他文本编辑器打开.env文件
 
 ```php
 
@@ -47,26 +65,21 @@ CREATE DATABASE `ywysys` DEFAULT CHARACTER SET = `utf8mb4`;
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
+# 数据库名
 DB_DATABASE=ywysys
+# 数据库账号
 DB_USERNAME=root
+# 数据库密码
 DB_PASSWORD=password
 
 # 配置API域名(二选一)
 API_DOMAIN=http://api.createos.xyz
-# ip+端口使用(二选一)
+# 使用ip+端口(二选一) 例 http://127.0.0.1:8000/api
 API_PREFIX=api
 
 ```
 
 ### 数据初始化
-
-- 生成JWT SECRET
-
-> 管理员登录令牌
-
-```shell
-php artisan jwt:secret
-```
 
 - 生成数据表
 
@@ -75,10 +88,6 @@ php artisan migrate
 ```
 
 - 初始化数据
-
-  - 管理员
-  - 国家列表
-  - 物流渠道
 
 ```shell
 php artisan db:seed
@@ -98,7 +107,7 @@ php artisan db:seed
 
 /www/ywysys_web
 
-- 后端API
+- 后端API【注意：这里需要配置到public目录】
 
 /www/ywysys_back_v2/public
 
