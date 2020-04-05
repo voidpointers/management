@@ -17,7 +17,7 @@ class UsersSeeder extends Seeder
         $data = [
             [
                 'username' => 'admin',
-                'password' => Hash::make('admin'),
+                'password' => Hash::make('admin123'),
                 'create_time' => time(),
                 'update_time' => time(),
             ]
