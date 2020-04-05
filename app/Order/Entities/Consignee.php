@@ -26,9 +26,13 @@ class Consignee extends Model
     public function store(array $params, $uk = 'receipt_id')
     {
         $data = array_map(function ($item) {
+            $country = countries()[$item['country_id']];
+
             if (!$item['second_line']) {
                 $item['second_line'] = '';
             }
+            $item['country_code'] = $country->code;
+            $item['country'] = $country->en;
             return $item;
         }, $params);
         

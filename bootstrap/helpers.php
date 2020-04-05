@@ -149,3 +149,15 @@ if (!function_exists('shops')) {
         return $shops;
     } 
 }
+
+if (!function_exists('countries')) {
+    function countries()
+    {
+        $countries = Cache::store('file')->get('countries');
+        if (!$countries) {
+            $countries = DB::table('countries')->get()->keyBy('id');
+            Cache::store('file')->set('countries', $countries);
+        }
+        return $countries;
+    } 
+}
