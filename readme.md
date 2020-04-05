@@ -54,7 +54,7 @@ CREATE DATABASE `ywysys` DEFAULT CHARACTER SET = `utf8mb4`;
 ```shell
 cd /www/ywysys_back_v2
 
-cp .env.example .env 
+cp .env.example .env
 ```
 
 使用vim 或者其他文本编辑器打开.env文件
@@ -160,3 +160,28 @@ server
   }
 }
 ```
+
+### Apache 配置示例【以类 Unix系统为例，windows步骤类似】
+
+- 开启虚拟主机配置【去掉#号注释即可】
+
+```config
+# Virtual hosts
+Include /private/etc/apache2/extra/httpd-vhosts.conf
+```
+
+LoadModule rewrite_module libexec/apache2/mod_rewrite.so
+
+- 配置站点
+
+> /etc/apache2/extra/httpd-vhosts.conf
+
+```
+<VirtualHost *:80>
+    DocumentRoot "/www/ywysys_back_v2/public"
+    ServerName api.createos.xyz
+    ErrorLog "/private/var/log/apache2/createos.one-error_log"
+    CustomLog "/private/var/log/apache2/createos.one-access_log" common
+</VirtualHost>
+```
+
