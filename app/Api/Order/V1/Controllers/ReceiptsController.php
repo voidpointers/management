@@ -30,6 +30,15 @@ class ReceiptsController extends Controller
 
     protected $transaction;
 
+    protected const STATUS = [
+        'new' => 1,
+        'fllow_up' => 2,
+        'followed' => 3,
+        'packaged' => 4,
+        'shipped' => 8,
+        'closed' => 7
+    ];
+
     public function __construct(
         ReceiptRequest $receiptRequest,
         Transaction $transaction,
@@ -94,20 +103,31 @@ class ReceiptsController extends Controller
     }
 
     /**
-     * 关闭
+     * 状态转移
      */
-    public function close(Request $request)
+    public function operating(Request $request)
     {
-        $receipt_ids = $request->input('receipt_id', '');
-        if (!$receipt_ids) {
-            return $this->response->error('参数错误', 500);
+        $receipt_sn = $request->input('receipt_sn', '');
+        $status = $request->input('status');
+        if (!in_array($status, array_keys(self::STATUS))) {
+            return false;
         }
-        $receipt_ids = json_decode($receipt_ids);
+
+        $data = [
+            'status' => self::STATUS[$status],
+        ];
 
         // 更改状态
-        if (!$this->stateMachine->operation('close', ['id' => $receipt_ids])) {
-            return $this->response->error('订单状态更改失败', 500);
+        $query = Receipt::whereIn('receipt_sn', explode(',', $receipt_sn));
+
+        // 查询当前状态
+        foreach ($query->get() as $receipt) {
+            if ($receipt->status == $this->data['status']) {
+                return $this->response->error('不允许重复操作', 500);
+            }
         }
+
+        $query->update($data);
 
         return $this->response->noContent();
     }
@@ -167,5 +187,4 @@ class ReceiptsController extends Controller
 
         return ['msg' => 'success'];
     }
-
 }
