@@ -60,9 +60,9 @@ $api->version('v1', [
         $api->post('drafts/approve', 'DraftsController@approve');
         $api->resource('drafts', 'DraftsController');
         $api->post('conversations/draft/approve', 'DraftsController@approve');
+        $api->get('receipts/message', 'ReceiptsController@message');
         $api->resource('receipts', 'ReceiptsController');
         $api->resource('templates', 'TemplatesController');
-        $api->get('receipts/message', 'ReceiptsController@message');
         $api->post('receipts/send', 'ReceiptsController@send');
     });
     $api->group([
