@@ -167,4 +167,5 @@ class ReceiptsController extends Controller
 
         return ['msg' => 'success'];
     }
+
 }

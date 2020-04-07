@@ -5,10 +5,19 @@ namespace Api\Customer\V1\Controllers;
 use Api\Order\V1\Transforms\ReceiptTransformer;
 use App\Controller;
 use Customer\Entities\Message;
+use Dingo\Api\Http\Request;
+use Etsy\Requests\ConversationRequest;
 use Order\Entities\Receipt;
 
 class ReceiptsController extends Controller
 {
+    protected $conversationRequest;
+
+    public function __construct(ConversationRequest $conversationRequest)
+    {
+        $this->conversationRequest = $conversationRequest;
+    }
+
     public function show($convo_id)
     {
         $message = Message::where(['conversation_id' => $convo_id])->first();
@@ -17,5 +26,20 @@ class ReceiptsController extends Controller
             Receipt::where(['buyer_user_id' => $message->sender_id])->get(),
             ReceiptTransformer::class
         );
+    }
+
+    public function send(Request $request)
+    {
+        $convo_id = $request->input('conversation_ids');
+        $message = $request->input('message');
+
+        foreach ($convo_id as $convo) {
+            $this->conversationRequest->sendByReceipt([
+                'conversation_id' => $convo,
+                'message' => $message
+            ]);
+        }
+
+        return ['msg' => 'success'];
     }
 }
