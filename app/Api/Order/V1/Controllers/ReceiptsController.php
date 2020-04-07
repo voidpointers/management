@@ -110,7 +110,7 @@ class ReceiptsController extends Controller
         $receipt_sn = $request->input('receipt_sn', '');
         $status = $request->input('status');
         if (!in_array($status, array_keys(self::STATUS))) {
-            return false;
+            return $this->response->error('状态错误', 500);
         }
 
         $data = [
@@ -122,14 +122,14 @@ class ReceiptsController extends Controller
 
         // 查询当前状态
         foreach ($query->get() as $receipt) {
-            if ($receipt->status == $this->data['status']) {
+            if ($receipt->status == $data['status']) {
                 return $this->response->error('不允许重复操作', 500);
             }
         }
 
         $query->update($data);
 
-        return $this->response->noContent();
+        return $this->response->array(['msg' => 'success']);
     }
 
     /**
