@@ -31,7 +31,10 @@ class ReceiptsController extends Controller
     public function message(Request $request)
     {
         $receipt_id = $request->input('receipt_id');
-        $receipt = Receipt::where(['receipt_id' => $receipt_id])->get();
+        $receipt = Receipt::where(['receipt_id' => $receipt_id])->first();
+        if (!$receipt) {
+            return $this->response->error('订单不存在', 500);
+        }
 
         $data = $this->conversationRequest->receipt($receipt);
 
