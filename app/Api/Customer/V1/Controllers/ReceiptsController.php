@@ -36,7 +36,11 @@ class ReceiptsController extends Controller
             return $this->response->error('订单不存在', 500);
         }
 
-        $data = $this->conversationRequest->receipt($receipt);
+        $tody = date('M d, Y');
+        $data = [
+            'subject' => "Re: Order #{$receipt_id} on {$tody}",
+            'message' => "Invoice: https://www.etsy.com/your/orders/{$receipt_id}"
+        ];
 
         return $this->response->array($data);
     }
