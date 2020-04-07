@@ -31,6 +31,7 @@ class ReceiptsController extends Controller
     public function send(Request $request)
     {
         $receipt_id = $request->input('receipt_id');
+        $receipt_id = explode(',', $receipt_id);
         $message = $request->input('message');
 
         foreach ($receipt_id as $receipt) {
