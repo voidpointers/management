@@ -43,4 +43,15 @@ class ConversationRequest
 
         return json_decode((string)$response->getBody(), true);
     }
+
+    public function receipt($params)
+    {
+        $receipt_id = $params->receipt_id;
+        $shop_id = $params->shop_id;
+
+        $url = "https://www.etsy.com/api/v3/ajax/shop/{$receipt_id}/mission-control/orders/convos/{$shop_id}";
+
+        $response = $this->client->request('GET', $url);
+        return json_decode((string)$response->getBody(), true);
+    }
 }

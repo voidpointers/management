@@ -28,6 +28,16 @@ class ReceiptsController extends Controller
         );
     }
 
+    public function message(Request $request)
+    {
+        $receipt_id = $request->input('receipt_id');
+        $receipt = Receipt::where(['receipt_id' => $receipt_id])->get();
+
+        $data = $this->conversationRequest->receipt($receipt);
+
+        return $this->response->array($data);
+    }
+
     public function send(Request $request)
     {
         $receipt_id = $request->input('receipt_id');
