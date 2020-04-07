@@ -44,11 +44,12 @@ class ReceiptsController extends Controller
     public function send(Request $request)
     {
         $receipt_id = $request->input('receipt_id');
-        $receipt_id = explode(',', $receipt_id);
+        $receipts = Receipt::where(['receipt_id' => explode(',', $receipt_id)])->get();
 
-        foreach ($receipt_id as $receipt) {
+        foreach ($receipts as $receipt) {
             $this->conversationRequest->sendByReceipt([
-                'receipt_id' => $receipt,
+                'receipt_id' => $receipt->receipt_id,
+                'shop_id' => $receipt->shop_id,
                 'message' => $request->input('message'),
                 'subject' => $request->input('subject')
             ]);
