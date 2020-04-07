@@ -30,12 +30,12 @@ class ReceiptsController extends Controller
 
     public function send(Request $request)
     {
-        $convo_id = $request->input('conversation_ids');
+        $receipt_id = $request->input('receipt_id');
         $message = $request->input('message');
 
-        foreach ($convo_id as $convo) {
+        foreach ($receipt_id as $receipt) {
             $this->conversationRequest->sendByReceipt([
-                'conversation_id' => $convo,
+                'receipt_id' => $receipt,
                 'message' => $message
             ]);
         }
