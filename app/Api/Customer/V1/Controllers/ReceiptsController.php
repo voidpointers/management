@@ -32,12 +32,12 @@ class ReceiptsController extends Controller
     {
         $receipt_id = $request->input('receipt_id');
         $receipt_id = explode(',', $receipt_id);
-        $message = $request->input('message');
 
         foreach ($receipt_id as $receipt) {
             $this->conversationRequest->sendByReceipt([
                 'receipt_id' => $receipt,
-                'message' => $message
+                'message' => $request->input('message'),
+                'subject' => $request->input('subject')
             ]);
         }
 
