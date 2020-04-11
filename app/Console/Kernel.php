@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\ReceiptPull::class,
         \App\Console\Commands\Country::class,
+        \App\Console\Commands\Listing::class,
     ];
 
     /**

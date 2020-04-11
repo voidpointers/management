@@ -4,7 +4,6 @@ namespace Api\Etsy\V1\Controllers;
 
 use App\Controller;
 use Dingo\Api\Http\Request;
-use Listing\Services\ListingService;
 use Voidpointers\Etsy\Facades\Etsy;
 
 /**
@@ -12,9 +11,10 @@ use Voidpointers\Etsy\Facades\Etsy;
  */
 class ListingsController extends Controller
 {
-    public function lists(Request $request)
+    public function index(Request $request)
     {
-        return Etsy::findAllListingActive([
+        // return Etsy::findAllListingActive([
+        return Etsy::findAllShopListingsActive([
             'params' => $request->all(),
             'associations' => ['Images']
         ]);

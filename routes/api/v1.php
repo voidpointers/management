@@ -48,6 +48,8 @@ $api->version('v1', [
     ], function ($api) {
         $api->resource('receipts', 'ReceiptsController');
         $api->resource('shops', 'ShopsController');
+        $api->get('listings/inventory/{listing_id}', 'ListingsController@inventory');
+        $api->resource('listings', 'ListingsController');
     });
     $api->group([
         'namespace' => 'Api\Customer\V1\Controllers',
