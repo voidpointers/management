@@ -20,6 +20,15 @@ class DraftsController extends Controller
         $this->conversationRequest = $conversationRequest;
     }
 
+    public function index(Request $request)
+    {
+        $data = Draft::where(['status' => 1])->get();
+
+        return $this->response->collection(
+            $data, DraftTransformer::class
+        );
+    }
+
     public function show(Request $request, $conversation_id)
     {
         $message = $this->info($conversation_id, [1, 2]);
