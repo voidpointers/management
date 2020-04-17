@@ -74,4 +74,10 @@ class ListingsController extends Controller
 
         return $this->response->array(['msg' => 'success']);
     }
+
+    public function renew(Request $request)
+    {
+        $data = $this->listingRequest->push(['shop_id' => shop_id()]);
+        return $this->response->array(['msg' => 'success']);
+    }
 }

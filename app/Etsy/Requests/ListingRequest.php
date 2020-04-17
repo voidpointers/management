@@ -47,4 +47,11 @@ class ListingRequest
         }
         return true;
     }
+
+    public function push($params)
+    {
+        $a = Etsy::updateAttribute(
+            ['params' => ['consumer_key' => 1]]
+        );var_dump($a);exit;
+    }
 }
