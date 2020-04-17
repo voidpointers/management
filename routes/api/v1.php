@@ -69,7 +69,8 @@ $api->version('v1', [
         'namespace' => 'Api\Product\V1\Controllers',
         'prefix' => 'product'
     ], function ($api) {
-        $api->get('listings/pull', 'ListingsController@pull');
+        $api->get('listings/renew', 'ListingsController@renew');
+        $api->get('listings/push', 'ListingsController@push');
         $api->resource('listings', 'ListingsController');
     });
 });
