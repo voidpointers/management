@@ -77,7 +77,8 @@ class ListingsController extends Controller
 
     public function renew(Request $request)
     {
-        $data = $this->listingRequest->push(['shop_id' => shop_id()]);
+        $listing_id = $request->input('listing_id', '');
+        $data = $this->listingRequest->renew($listing_id);
         return $this->response->array(['msg' => 'success']);
     }
 }

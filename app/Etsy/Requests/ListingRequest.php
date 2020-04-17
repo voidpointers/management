@@ -48,10 +48,10 @@ class ListingRequest
         return true;
     }
 
-    public function push($params)
+    public function renew($listing_id)
     {
-        $a = Etsy::updateAttribute(
-            ['params' => ['consumer_key' => 1]]
+        $a = Etsy::updateListing(
+            ['params' => ['listing_id' => $listing_id, 'renew' => true]]
         );var_dump($a);exit;
     }
 }
