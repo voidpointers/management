@@ -2,6 +2,7 @@
 
 namespace Etsy\Requests;
 
+use Illuminate\Support\Facades\Auth;
 use Product\Entities\Image;
 use Product\Entities\Inventory;
 use Product\Entities\Listing;
@@ -50,12 +51,14 @@ class ListingRequest
 
     public function renew($listing_id)
     {
+        $token = Auth::guard('api')->refresh();var_dump($token);exit;
+        return $this->respondWithToken($token);
         //测试权限
         $access_token = env('ETSY_ACCESS_TOKEN');
         $access_token_secret = env('ETSY_ACCESS_TOKEN_SECRET');
 
-        $oauth = new \OAuth(env('ETSY_CONSUMER_KEY'), env('ETSY_CONSUMER_SECRET'),
-            OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);
+        $oauth = new OAuth(env('ETSY_CONSUMER_KEY'), env('ETSY_CONSUMER_SECRET'),
+            OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);var_dump($oauth);exit;
         $oauth->setToken($access_token, $access_token_secret);
 
         try {
