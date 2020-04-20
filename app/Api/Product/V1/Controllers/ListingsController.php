@@ -44,7 +44,7 @@ class ListingsController extends Controller
 
     public function pull(Request $request)
     {
-        $data = $this->listingRequest->pull(['shop_id' => shop_id()]);
+        $data = $this->listingRequest->pull(['shop_id' => 16333181]);
 
         return $this->response->array(['msg' => 'success']);
     }
