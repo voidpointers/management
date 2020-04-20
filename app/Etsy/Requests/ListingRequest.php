@@ -53,7 +53,7 @@ class ListingRequest
     {
         $listing = DB::table('shops')->get();
         foreach ($listing as $user) {
-            echo $user->listing_id;
+            echo $user->shop_id;
         }exit;
         //测试权限
         $access_token = env('ETSY_ACCESS_TOKEN');
