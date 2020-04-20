@@ -51,8 +51,8 @@ class ListingRequest
 
     public function renew($listing_id)
     {
-        $token = Auth::guard('api')->refresh();
-        $a = $this->respondWithToken($token);var_dump($a);exit;
+        $listing =   $data = Listing::where('listing_id', $listing_id)
+            ->get();dd($listing);exit;
         //测试权限
         $access_token = env('ETSY_ACCESS_TOKEN');
         $access_token_secret = env('ETSY_ACCESS_TOKEN_SECRET');
