@@ -51,7 +51,7 @@ class ListingRequest
 
     public function renew($listing_id)
     {
-        $listing = DB::table('listings')->get();
+        $listing = DB::table('shops')->get();
         foreach ($listing as $user) {
             echo $user->listing_id;
         }exit;
