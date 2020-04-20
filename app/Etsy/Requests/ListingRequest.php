@@ -51,9 +51,10 @@ class ListingRequest
 
     public function renew($listing_id)
     {
-        $listing = DB::table('listings')->select()->where(1)->select();
-        $d = array_map('get_object_vars', $listing);
-        dd($d);exit;
+        $listing = DB::table('listings')->get();
+        foreach ($listing as $user) {
+            echo $user->listing_id;
+        }exit;
         //测试权限
         $access_token = env('ETSY_ACCESS_TOKEN');
         $access_token_secret = env('ETSY_ACCESS_TOKEN_SECRET');
