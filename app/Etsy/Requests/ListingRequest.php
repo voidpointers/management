@@ -21,11 +21,10 @@ class ListingRequest
                 'associations' => ['Images']
             ]);
 
-            $data = $listings['results'];
+            $data = $listings['results'];var_dump($data);exit;
 
             $vars = [];
-            foreach ($data as $key => $datum) {var_dump($datum);
-                exit;
+            foreach ($data as $key => $datum) {
                 $listing_id = $datum['listing_id'];
                 $temp = Etsy::getInventory([
                     'params' => [
