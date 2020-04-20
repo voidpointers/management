@@ -51,7 +51,7 @@ class ListingRequest
 
     public function renew($listing_id)
     {
-        $listing = DB::table('listings')->select()->where('shop_id', 16333181)->get()
+        $listing = DB::table('listings')->select()->where(1)->select()
             ->map(function ($value) {return (array)$value;})->toArray();
         dd($listing);exit;
         //测试权限
