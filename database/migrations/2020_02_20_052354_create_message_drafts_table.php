@@ -16,8 +16,14 @@ class CreateMessageDraftsTable extends Migration
         Schema::create('message_drafts', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('shop_id')->unsigned()->default(0)->comment('店铺ID');
-            $table->bigInteger('conversation_id')->unsigned()->default(0)->comment('');
-            $table->bigInteger('sender_id')->unsigned()->default(0)->comment('');
+            $table->bigInteger('conversation_id')->unsigned()->default(0)->comment('会话ID');
+            $table->string('conversation_url', 255)->default('')->comment('会话URL');
+            $table->bigInteger('receipt_id')->unsigned()->default(0)->comment('订单ID');
+            $table->bigInteger('sender_id')->unsigned()->default(0)->comment('发送者ID');
+            $table->string('title', 255)->default('')->comment('');
+            $table->string('subject', 255)->default('')->comment('');
+            $table->string('buyer_name')->default('')->comment('');
+            $table->string('buyer_user_name')->default('')->comment('');
             $table->text('message')->comment('');
             $table->json('images')->comment('图片');
             $table->tinyInteger('status')->unsigned()->default(0)->comment('状态');

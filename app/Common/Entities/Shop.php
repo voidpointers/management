@@ -33,6 +33,7 @@ class Shop extends Model
             'consumer_key' => $shop['consumer_key'],
             'access_secret' => $params['access_secret'],
             'access_token' => $params['access_token'],
+            'cookie' => ''
         ];
         self::updateOrCreate(
             ['shop_id' => $params['shop_id']],

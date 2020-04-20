@@ -61,6 +61,16 @@ class ShopsController extends Controller
         );
     }
 
+    public function show(Request $request, $shop_id)
+    {
+        $data = Shop::where(['shop_id' => $shop_id])->first();
+
+        return $this->response->item(
+            $data,
+            ShopTransformer::class
+        );
+    }
+
     public function store(Request $request)
     {
 
