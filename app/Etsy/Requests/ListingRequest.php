@@ -2,7 +2,7 @@
 
 namespace Etsy\Requests;
 
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Product\Entities\Image;
 use Product\Entities\Inventory;
 use Product\Entities\Listing;
@@ -51,8 +51,8 @@ class ListingRequest
 
     public function renew($listing_id)
     {
-        $listing =   $data = Listing::where('shop_id', 16333181)
-            ->select()->toArray();
+        $listing = DB::table('listings')->select()->where('shop_id', 16333181)->get()
+            ->map(function ($value) {return (array)$value;})->toArray();
         dd($listing);exit;
         //测试权限
         $access_token = env('ETSY_ACCESS_TOKEN');
