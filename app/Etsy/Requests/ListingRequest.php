@@ -51,8 +51,8 @@ class ListingRequest
 
     public function renew($listing_id)
     {
-        $listing =   $data = Listing::where('listing_id', $listing_id)
-            ->get();dd($listing);exit;
+        $listing =   $data = Listing::where('shop_id', 16333181)
+            ->select();dd($listing);exit;
         //测试权限
         $access_token = env('ETSY_ACCESS_TOKEN');
         $access_token_secret = env('ETSY_ACCESS_TOKEN_SECRET');
