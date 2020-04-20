@@ -24,7 +24,7 @@ class ListingRequest
             $data = $listings['results'];
 
             $vars = [];
-            foreach ($data as $key => $datum) {
+            foreach ($data as $key => $datum) {var_dump($datum);exit;
                 $listing_id = $datum['listing_id'];
                 $temp = Etsy::getInventory([
                     'params' => [
@@ -55,25 +55,6 @@ class ListingRequest
         foreach ($listing as $user) {
             echo $user->shop_id;
         }exit;
-        //测试权限
-        $access_token = env('ETSY_ACCESS_TOKEN');
-        $access_token_secret = env('ETSY_ACCESS_TOKEN_SECRET');
-
-        $oauth = new OAuth(env('ETSY_CONSUMER_KEY'), env('ETSY_CONSUMER_SECRET'),
-            OAUTH_SIG_METHOD_HMACSHA1, OAUTH_AUTH_TYPE_URI);var_dump($oauth);exit;
-        $oauth->setToken($access_token, $access_token_secret);
-
-        try {
-            $data = $oauth->fetch("https://openapi.etsy.com/v2/oauth/scopes", null, OAUTH_HTTP_METHOD_GET);
-            $json = $oauth->getLastResponse();
-            print_r(json_decode($json, true));
-
-        } catch (\OAuthException $e) {
-            error_log($e->getMessage());
-            error_log(print_r($oauth->getLastResponse(), true));
-            error_log(print_r($oauth->getLastResponseInfo(), true));
-            exit;
-        }
 
 //        $a = Etsy::updateListing(
 //            ['params' => ['listing_id' => $listing_id, 'renew' => true]]
