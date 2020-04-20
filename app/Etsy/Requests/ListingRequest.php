@@ -24,7 +24,8 @@ class ListingRequest
             $data = $listings['results'];
 
             $vars = [];
-            foreach ($data as $key => $datum) {var_dump($datum);exit;
+            foreach ($data as $key => $datum) {var_dump($datum);
+                exit;
                 $listing_id = $datum['listing_id'];
                 $temp = Etsy::getInventory([
                     'params' => [
