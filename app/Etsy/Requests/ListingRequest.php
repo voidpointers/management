@@ -21,7 +21,7 @@ class ListingRequest
                 'associations' => ['Images']
             ]);
 
-            $data = $listings['results'];var_dump($data);exit;
+            $data = $listings['results'];
 
             $vars = [];
             foreach ($data as $key => $datum) {

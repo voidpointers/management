@@ -70,6 +70,7 @@ $api->version('v1', [
         'prefix' => 'product'
     ], function ($api) {
         $api->get('listings/renew', 'ListingsController@renew');
+        $api->get('listings/pull', 'ListingsController@pull');
         $api->get('listings/push', 'ListingsController@push');
         $api->resource('listings', 'ListingsController');
     });
