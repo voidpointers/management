@@ -14,6 +14,7 @@ use Order\Entities\Receipt;
 use Order\Entities\Transaction;
 use Order\Services\StateMachine;
 use Etsy\Requests\ReceiptRequest;
+use Illuminate\Support\Facades\DB;
 
 /**
  * 收据控制器
@@ -174,16 +175,33 @@ class ReceiptsController extends Controller
     public function pull(Request $request)
     {
         $request->offsetSet('shop_id', shop_id());
-        $data = $this->receiptRequest->filters($request->all());
+
+        $data = $this->receiptRequest->receipts($request->all());
         if (empty($data)) {
             echo "订单列表为空" . PHP_EOL;
             return;
         }
 
+        $entities = [
+            Receipt::class,
+            Transaction::class,
+            Consignee::class
+        ];
+
+        DB::beginTransaction();
+
         // 入库
-        (new Receipt())->store($data);
-        (new Transaction())->store($data);
-        (new Consignee())->store($data);
+        try {
+            foreach ($entities as $item) {
+                (new $item)->store($data);
+            }
+        } catch (\Exception $e) {
+            custom_log('error', 'receipt.log', $e->getMessage());
+            DB::rollBack();
+            throw $e;
+        }
+
+        DB::commit();
 
         return ['msg' => 'success'];
     }
