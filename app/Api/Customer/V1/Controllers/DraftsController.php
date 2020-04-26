@@ -52,16 +52,21 @@ class DraftsController extends Controller
             return $this->response->error('有草稿正在发送中，请稍等', 502);
         }
 
+        $data = [
+            'images' => $request->input('images'),
+            'message' => $message,
+        ];
         // 存储消息
-        $draft = Draft::updateOrCreate(
-            ['shop_id' => shop_id(), 'conversation_id' => $conversation_id, 'status' => 1],
-            ['message' => $message, 'sender_id' => 125136382, 'images' => '[]']
-        );
+        $draft = Draft::updateOrCreate([
+            'shop_id' => $request->input('shop_id'),
+            'conversation_id' => $conversation_id,
+            'status' => 1
+        ], $data);
 
         // 消息更新为已读
         Message::where([
             'conversation_id' => $conversation_id,
-            'shop_id' => shop_id()
+            'shop_id' => $request->input('shop_id')
         ])->update(['is_unread' => 0]);
 
         return $this->response->item($draft, new DraftTransformer);
