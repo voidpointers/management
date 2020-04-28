@@ -188,9 +188,11 @@ class DraftsController extends Controller
     protected function info($conversation_id, $status = [])
     {
         $where = [
-            'shop_id' => shop_id(),
             'conversation_id' => $conversation_id
         ];
+        if (shop_id()) {
+            $where['shop_id'] = shop_id();
+        }
 
         $query = Draft::query()->where($where);
 
