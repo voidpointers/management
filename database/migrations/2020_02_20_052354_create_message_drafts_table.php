@@ -15,6 +15,7 @@ class CreateMessageDraftsTable extends Migration
     {
         Schema::create('message_drafts', function (Blueprint $table) {
             $table->increments('id');
+            $table->tinyInteger('type')->unsigned()->default(1)->comment('类型');
             $table->bigInteger('shop_id')->unsigned()->default(0)->comment('店铺ID');
             $table->bigInteger('conversation_id')->unsigned()->default(0)->comment('会话ID');
             $table->string('conversation_url', 255)->default('')->comment('会话URL');
