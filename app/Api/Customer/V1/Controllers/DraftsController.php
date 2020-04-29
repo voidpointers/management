@@ -22,7 +22,12 @@ class DraftsController extends Controller
 
     public function index(Request $request)
     {
-        $data = Draft::where(['status' => 1])->get();
+        $where = ['status' => 1];
+        if ($request->has('shop_id')) {
+            $where['shop_id'] = $request->input('shop_id');
+        }
+
+        $data = Draft::where($where)->get();
 
         return $this->response->collection(
             $data, DraftTransformer::class
