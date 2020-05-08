@@ -49,7 +49,8 @@ class DraftsController extends Controller
         $conversation_id = $request->input('conversation_id', 0);
         $message = $request->post('message', '');
         if (1 > strlen($message)) {
-            return $this->response->error('消息不能为空', 500);
+            $this->complete($conversation_id);
+            return $this->response->array(['msg' => 'success']);
         }
 
         $draft = $this->info($conversation_id, [2]);
@@ -206,5 +207,15 @@ class DraftsController extends Controller
         }
 
         return $query->orderBy('id', 'desc')->first();
+    }
+
+    protected function complete($conversation_id)
+    {
+        return Message::where([
+            'conversation_id' => $conversation_id,
+            'shop_id' => shop_id(),
+        ])->update([
+            'status' => 8, 'is_unread' => 0
+        ]);
     }
 }
