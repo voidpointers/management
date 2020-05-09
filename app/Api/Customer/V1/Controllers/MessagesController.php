@@ -114,7 +114,7 @@ class MessagesController extends Controller
             return $this->response->error('缺少店铺ID', 500);
         }
 
-        Message::where(['shop_id', $shop_id])
+        Message::where('shop_id', $shop_id)
         ->whereIn('conversation_id', explode(',', $conversation_id))
         ->update(['status' => 1]);
 
