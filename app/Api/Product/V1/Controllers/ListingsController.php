@@ -28,6 +28,12 @@ class ListingsController extends Controller
             $applay = $applay->where(['shop_id' => shop_id()]);
         }
 
+		$status2 = $request->get('status2', 'all');
+		if('all' != $status2){
+			$applay = $applay->where('state',  $status2);
+		}
+
+
         $transfomer = ListingTransformer::class;
         if ('all' == $request->get('query')) {
             $applay->with(['images']);
@@ -44,9 +50,13 @@ class ListingsController extends Controller
 
     public function pull(Request $request)
     {
-        $data = $this->listingRequest->pull(['shop_id' => $request->input('shop_id', 0)]);
+		$params=[
+			'shop_id' => $request->input('shop_id', 0),
+			'page' => $request->input('page', 0),
+		];
+        $data = $this->listingRequest->pullByPage($params);
 
-        return $this->response->array(['msg' => 'success']);
+        return $this->response->array(['msg' => 'success', 'data' => $data]);
     }
 
     public function show($listing_id)

@@ -11,6 +11,7 @@ class Inventory extends Model
     protected $table = 'listing_inventories';
 
     protected $fillable = [
+		'listing_id',
         'product_id',
         'sku',
         'price',
