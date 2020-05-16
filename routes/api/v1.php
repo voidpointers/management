@@ -72,6 +72,7 @@ $api->version('v1', [
         $api->get('listings/renew', 'ListingsController@renew');
         $api->get('listings/pull', 'ListingsController@pull');
         $api->get('listings/push', 'ListingsController@push');
+		$api->get('listings/getdetailbyid/{listing_id}', 'ListingsController@getDetailById');
         $api->resource('listings', 'ListingsController');
     });
 });

@@ -20,7 +20,8 @@ class ListingsController extends Controller
         $this->listing = $listing;
         $this->listingRequest = $listingRequest;
     }
-    
+
+	//商品列表
     public function index(Request $request)
     {
         $applay = $this->listing->apply($request);
@@ -48,6 +49,7 @@ class ListingsController extends Controller
         );
     }
 
+	//商品拉取
     public function pull(Request $request)
     {
 		$params=[
@@ -58,6 +60,13 @@ class ListingsController extends Controller
 
         return $this->response->array(['msg' => 'success', 'data' => $data]);
     }
+
+	//获取一个商品的信息
+	public function getDetailById($listing_id){
+		$data = $this->listingRequest->getDetailById($listing_id);
+		return $this->response->item($data, new DetailTransformer);
+	}
+
 
     public function show($listing_id)
     {
