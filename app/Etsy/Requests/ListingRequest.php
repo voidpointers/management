@@ -111,6 +111,12 @@ class ListingRequest
 		return $return_data;
 	}
 
+	public function getDetailById($listing_id){
+		$listing = new Listing();
+		$data = $listing->where('listing_id', $listing_id)->with(['images', 'inventories'])->get()->first();
+		return $data;
+	}
+
 
     public function renew($listing_id)
     {
