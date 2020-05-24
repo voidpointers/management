@@ -73,7 +73,7 @@ class DraftsController extends Controller
         Message::where([
             'conversation_id' => $conversation_id,
             'shop_id' => $request->input('shop_id')
-        ])->update(['is_unread' => 0]);
+        ])->update(['is_unread' => 0, 'status' => 3]);
 
         return $this->response->item($draft, new DraftTransformer);
     }
