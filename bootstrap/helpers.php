@@ -161,3 +161,10 @@ if (!function_exists('countries')) {
         return $countries;
     } 
 }
+
+if (!function_exists('transfer_image')) {
+	function transfer_image($url, $old = 'il_fullxfull', $new = 'il_300x300')
+	{
+		return str_replace($old, $new, $url);
+	}
+}

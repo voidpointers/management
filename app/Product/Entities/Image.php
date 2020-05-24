@@ -53,6 +53,24 @@ class Image extends Model
         return true;
     }
 
+	public function storeV2($params, $uk = 'listing_id'){
+		$create = $update = [];
+		self::whereIn('listing_id', array_column($params, 'listing_id'))->delete();
+		foreach ($params as $param) {
+			foreach ($param['Images'] as $image) {
+				$image['is_sync'] = 1;
+				$create[] = $this->filled($image);
+			}
+		}
+
+		if ($create) {
+			self::insert($create);
+		}
+
+		return true;
+	}
+
+
     public function saveById($params)
     {
         $create = $update = [];
