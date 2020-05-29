@@ -148,7 +148,7 @@ class ListingRequest
 		$images = $listing["images"];//原有的图片
 		//设置sort
 		$i = 1;
-		foreach($image_new as $image){
+		foreach($image_new as &$image){
 			$image["sort"] = $i;
 			$i++;
 		}
