@@ -122,58 +122,63 @@ class ListingRequest
 		return $data;
 	}
 
-	public function syncToEtsyAndUpdateLocal($listing){
-		$shop_id = $listing["shop_id"];
-		$listing_id = $listing["listing_id"];
-		Log::info("sdf", [$listing]);
+	/**
+	 * 处理商品的图片
+	 * @param $listing_id
+	 * @param $old_images
+	 * @param $new_images
+	 * @return array
+	 */
+	public function handleImage($shop_id, $listing_id, $old_images, $new_images){
 		Cache::store('array')->put('shop_id', $shop_id);//店铺id
-		//更新基本信息
-		$base_data =  [
-			"params" => [
-				"listing_id" =>$listing_id
-			],
-			"data" => [
-				"title" => $listing['title_new'],
-				"description" => $listing['description_new'],
-				"tags" => $listing['tags_new'],
-				"state" => $listing["state"],
-				"taxonomy_id" => $listing["taxonomy_id_new"][count($listing["taxonomy_id_new"])-1]
-			]
-		];
-		Log::info("listing", $base_data);
-		$temp = Etsy::updateListing($base_data);
+		$new_image_ids = [];
+		foreach($new_images as $image){
+			if(isset($image['image_id'])){
+				$new_image_ids[] = $image['image_id'];
+			}
+		}
+		//对比从平台里删除关联
+		foreach($old_images as $image){
+			$image_id = isset($image["image_id"]) ? $image["image_id"] : "";
+			if($image_id != "" && !in_array($image["image_id"], $new_image_ids)){//需删除
+				self::deleteListingImage($listing_id, $image_id);
+			}
+		}
 
-		//更新图片
-		$image_new = $listing["images_new"];
-		$images = $listing["images"];//原有的图片
-		//设置sort
+		//排序
 		$i = 1;
-		foreach($image_new as &$image){
+		foreach($new_images as &$image){
 			$image["sort"] = $i;
 			$i++;
 		}
 		unset($image);
 
-		//1、有image_id 则需先在平台上delete，然后重新关联
-		//2、没有image_id 则需拿到图片文件上传到平台
-		foreach($images as $image){//删除关联
+		$image_ids = [];
+		foreach($new_images as $image){//重新关联或上传
 			if(isset($image["image_id"])){
-				self::deleteListingImage($listing_id, $image["image_id"]);
-			}
-		}
-
-		foreach($image_new as $image){//重新关联或上传
-			if(isset($image["image_id"])){
-				self::reAssociateListingImage($listing_id, $image["image_id"], $image["sort"]);
+				$image_ids[] = $image["image_id"];
 			}else{
 				$image_path = str_replace(getenv("API_DOMAIN"), "", $image["url"]);
 				$image_path = storage_path("/app/public".$image_path);
-				self::uploadListingImage($listing_id, $image_path, $image["sort"]);
+				$res = self::uploadListingImage($listing_id, $image_path, $image["sort"]);
+				$image_ids[] = $res['results'][0]['listing_image_id'];
 			}
 		}
 
-		//更新库存：价格，数量，sku
-		$inventories = $listing['inventories'];
+		return $image_ids;
+	}
+
+	/**
+	 * 处理库存
+	 * @param $shop_id
+	 * @param $listing_id
+	 * @param $inventories
+	 * @param $price_on_property
+	 * @param $quantity_on_property
+	 * @param $sku_on_property
+	 */
+	public function handleInventory($shop_id, $listing_id, $inventories, $price_on_property,  $quantity_on_property, $sku_on_property){
+		Cache::store('array')->put('shop_id', $shop_id);//店铺id
 		$to_etsy_inv = [];
 		foreach($inventories as $inventory){
 			foreach ($inventory["properties"] as &$properties) {
@@ -203,15 +208,17 @@ class ListingRequest
 				"products" =>[
 					"json" => json_encode($to_etsy_inv)
 				],
-				"price_on_property" => json_decode($listing["price_on_property"]), //控制价格是否独立
-				"quantity_on_property" => json_decode($listing["quantity_on_property"]), //控制数量是否独立
-				"sku_on_property" => json_decode($listing["sku_on_property"])//控制sku是否独立
+				"price_on_property" => json_decode($price_on_property), //控制价格是否独立
+				"quantity_on_property" => json_decode($quantity_on_property), //控制数量是否独立
+				"sku_on_property" => json_decode($sku_on_property)//控制sku是否独立
 			]
 		];
-		Log::info("toEtsyInv", $inventory_data);
-		$inv_return = Etsy::updateInventory($inventory_data);
 
+		$res = Etsy::updateInventory($inventory_data);
+	}
 
+	public function syncListingToLocal($shop_id, $listing_id){
+		Cache::store('array')->put('shop_id', $shop_id);//店铺id
 		//从etsy拉取数据保存到本地
 		$return_listing_data = Etsy::getListing([
 			'params' => [
@@ -220,7 +227,7 @@ class ListingRequest
 			'associations' => ['Images', 'Inventory']
 		]);
 		$listing_data = $return_listing_data["results"];
-		Log::info("return_listing_data", $listing_data);
+
 		$inventory = $listing_data[0]['Inventory'];
 		$products = $inventory[0]['products'];
 		$vars = [];
@@ -239,22 +246,54 @@ class ListingRequest
 	}
 
 	/**
-	 * @param $listing_id
-	 * @param $image_id
-	 * @param $sort
-	 * 重新关联图片
+	 * 同步一些基本信息到etsy
+	 * @param $shop_id
+	 * @param $listing
+	 * @param $image_ids
 	 */
-	public function reAssociateListingImage($listing_id, $image_id, $sort){
-		$data =  [
+	public function updateEtsyListing($shop_id, $listing, $image_ids){
+		Cache::store('array')->put('shop_id', $shop_id);//店铺id
+		$listing_id = $listing["listing_id"];
+		$base_data =  [
 			"params" => [
 				"listing_id" =>$listing_id
 			],
 			"data" => [
-				"listing_image_id" => $image_id,
-				"rank" => $sort
+				"title" => $listing['title_new'],
+				"description" => $listing['description_new'],
+				"tags" => $listing['tags_new'],
+				"state" => $listing["state"],
+				"taxonomy_id" => $listing["taxonomy_id_new"][count($listing["taxonomy_id_new"])-1],
+				'image_ids' => $image_ids //图片的顺序
 			]
 		];
-//		$temp = Etsy::uploadListingImage($data);
+		$res = Etsy::updateListing($base_data);
+	}
+
+	public function syncToEtsyAndUpdateLocal($listing){
+		$shop_id = $listing["shop_id"];
+		$listing_id = $listing["listing_id"];
+
+		Cache::store('array')->put('shop_id', $shop_id);//店铺id
+
+		//更新图片
+		$images_new = $listing["images_new"];
+		$images = $listing["images"];//原有的图片
+		$image_ids = self::handleImage($shop_id, $listing_id, $images, $images_new);
+
+		//更新基本信息
+		self::updateEtsyListing($shop_id, $listing, $image_ids);
+
+		//更新库存：价格，数量，sku
+		$inventories = $listing['inventories'];
+		$price_on_property = $listing["price_on_property"];//控制价格是否独立
+		$quantity_on_property = $listing["quantity_on_property"];//控制价格是否独立
+		$sku_on_property = $listing["sku_on_property"];//控制价格是否独立
+
+		self::handleInventory($shop_id, $listing_id, $inventories, $price_on_property, $quantity_on_property, $sku_on_property);
+
+		self::syncListingToLocal($shop_id, $listing_id);
+
 	}
 
 	/**
@@ -273,7 +312,8 @@ class ListingRequest
 				"rank" => $sort
 			]
 		];
-//		$temp = Etsy::uploadListingImage($data);
+		$temp = Etsy::uploadListingImage($data);
+		return $temp;
 	}
 
 	/**
@@ -288,7 +328,7 @@ class ListingRequest
 				"listing_image_id" => $image_id
 			]
 		];
-//		$delete_return = Etsy::deleteListingImage($delete_data);
+		$res = Etsy::deleteListingImage($delete_data);
 	}
 
 
