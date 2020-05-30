@@ -37,7 +37,10 @@ class Listing extends Model
         'description',
         'creation_tsz',
         'ending_tsz',
-        'last_modified_tsz'
+        'last_modified_tsz',
+		"price_on_property",
+		"quantity_on_property",
+		"sku_on_property"
     ];
 
     public function images()
@@ -84,7 +87,7 @@ class Listing extends Model
         ];
         foreach ($params as $key => $param) {
             if ('Images' == $key) {
-                $data['image'] = $param[0]['url_fullxfull'];
+				$data['image'] = isset($param[0]) ? $param[0]['url_fullxfull'] : "";
             }
             if (is_bool($param)) { // bool类型转换为int类型
                 $param = (int) $param;

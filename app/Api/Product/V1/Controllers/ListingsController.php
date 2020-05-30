@@ -7,6 +7,7 @@ use Api\Product\V1\Transforms\ListingTransformer;
 use App\Controller;
 use Dingo\Api\Http\Request;
 use Etsy\Requests\ListingRequest;
+use Illuminate\Support\Facades\Log;
 use Product\Entities\Listing;
 
 class ListingsController extends Controller
@@ -93,6 +94,15 @@ class ListingsController extends Controller
 
         return $this->response->array(['msg' => 'success']);
     }
+
+	public function store(Request $request)
+	{
+		$params = $request->json()->all();
+		foreach ($params as $param) {
+			$this->listingRequest->syncToEtsyAndUpdateLocal($param);
+		}
+		return $this->response->array(['msg' => 'success']);
+	}
 
     public function renew(Request $request)
     {

@@ -54,7 +54,9 @@ class Inventory extends Model
         $properties = [];
         foreach ($params['property_values'] as $item) {
             $properties[] = [
+				"property_id" => $item['property_id'],
                 'property_name' => $item['property_name'],
+				"scale_id" => $item['scale_id'],
                 'scale_name' => $item['scale_name'],
                 'values' => $item['values'][0]
             ];
