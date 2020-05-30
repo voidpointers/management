@@ -44,63 +44,52 @@ class DraftsController extends Controller
         );
     }
 
+    /**
+     * 保存草稿
+     */
     public function store(ConversationIdRequest $request)
     {
         $conversation_id = $request->input('conversation_id', 0);
-        $message = $request->post('message', '');
-        if (1 > strlen($message)) {
-            $this->complete($conversation_id);
-            return $this->response->array(['msg' => 'success']);
-        }
 
-        $draft = $this->info($conversation_id, [2]);
-        if ($draft) {
-            return $this->response->error('有草稿正在发送中，请稍等', 502);
-        }
-
-        $data = [
-            'images' => $request->input('images'),
-            'message' => $message,
-        ];
-        // 存储消息
-        $draft = Draft::updateOrCreate([
-            'shop_id' => $request->input('shop_id'),
-            'conversation_id' => $conversation_id,
-            'status' => 1
-        ], $data);
+        $draft = $this->create($request);
 
         // 消息更新为已读
         Message::where([
             'conversation_id' => $conversation_id,
             'shop_id' => $request->input('shop_id')
-        ])->update(['is_unread' => 0, 'status' => 3]);
+        ])->update(['is_unread' => 0]);
 
         return $this->response->item($draft, new DraftTransformer);
     }
 
-    public function approve(Request $request)
+    /**
+     * 提交【有消息则等待发送，无消息则提交到已完成】
+     */
+    public function submit(Request $request)
     {
         $message = $request->input('message', '');
         if (!$message) {
-            Message::where([
-                'conversation_id' => (int) $request->input('conversation_id'),
-                'shop_id' => shop_id(),
-            ])->update([
-                'status' => 8, 'is_unread' => 0
-            ]);
-
-            return $this->response->array(['msg' => 'success']);
+            $data = ['status' => 8, 'is_unread' => 0];
+        } else {
+            $data = ['status' => 3];
+            // 更新草稿
+            $draft = $this->create($request);
         }
-        
-        $this->send($request->all());
+
+        // 更新消息
+        Message::where([
+            'conversation_id' => (int) $request->input('conversation_id'),
+            'shop_id' => shop_id(),
+        ])->update($data);
 
         return $this->response->array(['msg' => 'success']);
     }
 
+    
     /**
      * 审核通过
      */
-    public function approveV2(Request $request)
+    public function approve(Request $request)
     {
         $shop_id = shop_id();
 
@@ -207,6 +196,31 @@ class DraftsController extends Controller
         }
 
         return $query->orderBy('id', 'desc')->first();
+    }
+
+    /**
+     * 存储或更新草稿
+     */
+    protected function create($request)
+    {
+        $conversation_id = $request->input('conversation_id', 0);
+
+        $draft = $this->info($conversation_id, [2]);
+        if ($draft) {
+            return $this->response->error('有草稿正在发送中，请稍等', 502);
+        }
+
+        $data = [
+            'images' => $request->input('images'),
+            'message' => $request->post('message', ''),
+        ];
+        // 存储消息
+        $draft = Draft::updateOrCreate([
+            'shop_id' => $request->input('shop_id'),
+            'conversation_id' => $conversation_id,
+            'status' => 1
+        ], $data);
+        return $draft;
     }
 
     protected function complete($conversation_id)
