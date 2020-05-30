@@ -4,7 +4,6 @@ namespace Etsy\Requests;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Product\Entities\Image;
 use Product\Entities\Inventory;
 use Product\Entities\Listing;
